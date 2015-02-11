@@ -11,7 +11,7 @@ Dealing With Git
 ### Creating a new branch
 From the branch you want to branch from:
 ```
-"git checkout -b"
+"git checkout -b new_branch_new"
 ```
 
 ### Saving Changes to a Branch
