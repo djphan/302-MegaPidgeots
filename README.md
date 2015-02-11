@@ -22,6 +22,7 @@ git push origin your_branch_new
 ```
 
 ### Merging Changes to Master
+If you have created a new feature on a separate branch and are ready to add it to master:
 ```
 1) Go to: https://github.com/vbobey/302-MegaPidgeots/pulls
 2) Click the "New Pull Request" Button
