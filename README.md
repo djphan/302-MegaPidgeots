@@ -2,7 +2,7 @@
 CMPUT 302: Augmented Reality Project
 
 Dealing With Git
------------------------------------------------------
+------------------------------------------------------
 ### Navigating to a Branch
 ```
 "git checkout branch_name"
