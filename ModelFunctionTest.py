@@ -13,8 +13,8 @@ class polyModelDict():
 	def getSize(self):
 		return len(self.polyModelDict)
 
-	def getSize(self):
-		return len(self.polyModelDict)
+	def getDict(self):
+		return self.polyModelDict
 
 	def getPolygonModel(name):
 		try:
