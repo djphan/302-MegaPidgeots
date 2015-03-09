@@ -4,18 +4,23 @@ import operator
 import codecs
 import glob
 
-
 class polyModelDict():
 	def __init__(self):
 		self.polyModelDict = {}
 
 	#some wrapped functions to play around with for the time being
+
+	#Return size of dictionary
 	def getSize(self):
 		return len(self.polyModelDict)
 
+
+	#Returns the entire dictionary 
 	def getDict(self):
 		return self.polyModelDict
 
+
+	#Returns a reference to the polygon model
 	def getPolygonModel(name):
 		try:
 			return self.polyModelDict[name]
@@ -24,6 +29,7 @@ class polyModelDict():
 		return None
 
 
+	#Load a polygon model
 	def loadPolygonModel(self,path,name):
 		try:
 			if not(SceneManager.doesModelExist(name)):
@@ -37,7 +43,9 @@ class polyModelDict():
 			print("name: "+name)
 			return 1
 		return 0
+	
 
+	#Deletes a model
 	def deletePolygonModel(self,name):
 		try:
 			SceneManager.deleteModel(name)
@@ -48,23 +56,48 @@ class polyModelDict():
 			return 1
 		return 0
 
+
+	#Set/Get Translation of model in X,Y,Z
+	def getPositionOffset(self,name):
+		return self.polyModelDict[name].getPositionOffset()
+
 	def setPositionOffset(self,name,position):
-		try:
-			self.polyModelDict[name].setPositionOffset(position)
+		try:	
+			if len(position) == 3:
+				self.polyModelDict[name].setPositionOffset(position[0],position[1],position[2])
+			else:
+				print "invalid position input"
+				return 1
 		except:
 			return 1
 		return 0
 
-	def setPositionOffset(self,name,quat):
+	#Set/Get rotation of model in X,Y,Z,W
+	def getRotationOffset(self,name):
+		return self.polyModelDict[name].getRotationOffset()
+
+	def setRotationOffset(self,name,quat):
 		try:
-			self.polyModelDict[name].setRotationOffset(quat)
+			if len(quat) == 4:
+				self.polyModelDict[name].setRotationOffset(quat[0],quat[1],quat[2],quat[3])
+			else:
+				print"invalid rotation input"
+				return 1
 		except:
 			return 1
 		return 0
+
+	#Set/Get Scale of model in X,Y,Z
+	def getScale(self,name):
+		return self.polyModelDict[name].getScale()
 
 	def setScale(self,name,scale):
 		try:
-			self.polyModelDict[name].setScale(scale)
+			if len(scale) == 3:
+				self.polyModelDict[name].setScale(scale[0],scale[1],scale[2])
+			else:
+				print"invalid scale input"
+			return 1
 		except:
 			return 1
 		return 0
@@ -94,21 +127,22 @@ name = "hooooooooooo- "
 #load model from path
 #modelist = list([0]*len(paths))
 #test loading multiple models
-polydict = polyModelDict()
 
-modellist = []
-for i in range(3):
-	polydict.loadPolygonModel(paths[i],name+str(i))
+path = 'C:\Program Files\ProjectDR\Model\osg-data-master\cessna.osg'
 
-#print(polyModelDict)
-print(polydict.getSize())
+polyDict = polyModelDict()
 
+polyDict.loadPolygonModel(path,name)
 
-
-for i in range(3):
-	polydict.deletePolygonModel(name+str(i))
-
-print(polydict.getSize())
+print "position: "+str(polyDict.getPositionOffset(name))
+print "rotation: "+str(polyDict.getRotationOffset(name))
+print "scale: "+str(polyDict.getScale(name))
+polyDict.setPositionOffset(name,(1.0,2.0,4.0))
+polyDict.setRotationOffset(name,(1.0,2.0,4.0,8.0))
+polyDict.setScale(name,(1.0,2.0,4.0))
+print "position: "+str(polyDict.getPositionOffset(name))
+print "rotation: "+str(polyDict.getRotationOffset(name))
+print "scale: "+str(polyDict.getScale(name))
 
 
 #write to file
