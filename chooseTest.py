@@ -2,18 +2,19 @@ import sys
 from PyQt4 import QtGui, QtCore
 
 '''
-The MainWindow class displays the page where the user can select a 
+The ChooseTestWindow class displays the page where the user can select a 
 premade test from a drop-down list. Once the user chooses a test, the
 description matching the test is displayed along with related images.
 '''
-class MainWindow(QtGui.QMainWindow):
+class ChooseTestWindow(QtGui.QMainWindow):
     
     def __init__(self):
-        super(MainWindow, self).__init__()
+        super(ChooseTestWindow, self).__init__()
         self.initUI()
         
     # Initilize the UI of the window
-    def initUI(self):        
+    def initUI(self):
+
         # Create a window for our layouts
         page = QtGui.QWidget()
 
@@ -42,6 +43,15 @@ class MainWindow(QtGui.QMainWindow):
         okButton.clicked.connect(self.buttonClicked)
         cancelButton = QtGui.QPushButton("Exit")
         cancelButton.clicked.connect(QtCore.QCoreApplication.instance().quit)
+
+        exitAction = QtGui.QAction(QtGui.QIcon('pigeot_icon.png'), '&Exit', self)        
+        exitAction.setShortcut('Ctrl+Q')
+        exitAction.setStatusTip('Exit application')
+        exitAction.triggered.connect(QtGui.qApp.quit)
+
+        addTestAction = QtGui.QAction(QtGui.QIcon('pigeot_icon.png'), '&AddTest' , self)
+        addTestAction.setStatusTip("Add Test")
+
         hbuttons = QtGui.QHBoxLayout()
         hbuttons.addStretch(1)
         hbuttons.addWidget(okButton)
@@ -74,7 +84,7 @@ class MainWindow(QtGui.QMainWindow):
         # Show our pigeot pokemon icon
         self.setWindowIcon(QtGui.QIcon('pigeot_icon.png'))      
         self.show()
-        
+
     # When the user selects an item from the list, display its information
     def onActivated(self, text):
         if (text == "Test #1"):
@@ -89,10 +99,12 @@ class MainWindow(QtGui.QMainWindow):
         elif (text == "Test #4"):
             text = "Tests all vertebre."
             pixmap = QtGui.QPixmap('pigeot_icon.png')
-        else:
+        elif (text == "Test #5"):
             text = "Tests vertebre for sections C1 through C7 and L1 through L5."
             pixmap = QtGui.QPixmap('big_bird.png')
-        
+        else:
+            text = "Custom Test"
+            pixmap = QtGui.QPixmap('big_bird.png')
         # Change displayed text and image
         pixmap = pixmap.scaledToHeight(400)
         self.descriptionText.setText(text)
@@ -103,17 +115,18 @@ class MainWindow(QtGui.QMainWindow):
     def buttonClicked(self):
         sender = self.sender()
         self.statusBar().showMessage(sender.text() + ' was pressed')
-        
+
     # A function to move the window to the center of the users screen
     def centerWindow(self):
         qr = self.frameGeometry()
         cp = QtGui.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-                
-def main():  
+
+      
+def main():
     app = QtGui.QApplication(sys.argv)
-    window = MainWindow()
+    window = ChooseTestWindow()
     sys.exit(app.exec_())
 
 
