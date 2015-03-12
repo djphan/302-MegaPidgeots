@@ -2,21 +2,19 @@ import sys
 from PyQt4 import QtGui, QtCore
 
 '''
-The MainWindow class displays the page where the user can select a 
+The RunTest class is a widget where the user can select a 
 premade test from a drop-down list. Once the user chooses a test, the
 description matching the test is displayed along with related images.
 '''
-class MainWindow(QtGui.QMainWindow):
+class RunTest(QtGui.QWidget):
     
     def __init__(self):
-        super(MainWindow, self).__init__()
+        super(RunTest, self).__init__()
         self.initUI()
         
-    # Initilize the UI of the window
-    def initUI(self):        
-        # Create a window for our layouts
-        page = QtGui.QWidget()
-
+    # Initilize the UI of the widget
+    def initUI(self):   
+        
         # Instructions text box
         instruText = QtGui.QLabel("Choose a test from the drop-down menu.")
         font = QtGui.QFont()
@@ -42,6 +40,7 @@ class MainWindow(QtGui.QMainWindow):
         okButton.clicked.connect(self.buttonClicked)
         cancelButton = QtGui.QPushButton("Exit")
         cancelButton.clicked.connect(QtCore.QCoreApplication.instance().quit)
+        # Formatting for the Ok and Exit Buttons        
         hbuttons = QtGui.QHBoxLayout()
         hbuttons.addStretch(1)
         hbuttons.addWidget(okButton)
@@ -53,7 +52,7 @@ class MainWindow(QtGui.QMainWindow):
         # Set the default test to be displayed on launch in text description box
         self.descriptionText = QtGui.QLabel("Tests vertebre for sections C1 through C7.", self)
         
-        # Add widgets and layouts to window
+        # Add sub-widgets to the main layout
         mainVbox = QtGui.QVBoxLayout()
         mainVbox.stretch(1)
         mainVbox.addWidget(instruText)
@@ -61,8 +60,7 @@ class MainWindow(QtGui.QMainWindow):
         mainVbox.addWidget(self.descriptionText)
         mainVbox.addWidget(self.img)
         mainVbox.addLayout(vbuttons)
-        page.setLayout(mainVbox)     
-        self.setCentralWidget(page)
+        self.setLayout(mainVbox)
 
         # Create the drop down list on the window
         combo.activated['QString'].connect(self.onActivated)    
@@ -100,6 +98,7 @@ class MainWindow(QtGui.QMainWindow):
         self.img.setPixmap(pixmap)
       
      # Do something when the "Ok" button is clicked
+     # TODO: We want to make the OK button do something useful :)
     def buttonClicked(self):
         sender = self.sender()
         self.statusBar().showMessage(sender.text() + ' was pressed')
@@ -113,7 +112,7 @@ class MainWindow(QtGui.QMainWindow):
                 
 def main():  
     app = QtGui.QApplication(sys.argv)
-    window = MainWindow()
+    window = RunTest()
     sys.exit(app.exec_())
 
 
