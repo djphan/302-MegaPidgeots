@@ -78,7 +78,7 @@ class polyModelDict():
 #model path and name
 paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
 #paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\glider.osg")
-name = "hooooooooooo- "
+name = "hooooooooooo-"
 
 #optitrack stuff
 #local_IP = "25.79.169.119"
