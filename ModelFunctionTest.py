@@ -10,8 +10,6 @@ class polyModelDict():
 
 	#some wrapped functions to play around with for the time being
 
-<<<<<<< HEAD
-=======
 	#Return size of dictionary
 	def getSize(self):
 		return len(self.polyModelDict)
@@ -23,7 +21,6 @@ class polyModelDict():
 
 
 	#Returns a reference to the polygon model
->>>>>>> f2880baf38d6f83be62e2c40c561c0a1242b2cd0
 	def getPolygonModel(name):
 		try:
 			return self.polyModelDict[name]
@@ -115,8 +112,8 @@ class polyModelDict():
 
 
 #model path and name
-paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
-#paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\glider.osg")
+#paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
+paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
 name = "hooooooooooo- "
 
 #optitrack stuff
@@ -131,7 +128,8 @@ name = "hooooooooooo- "
 #modelist = list([0]*len(paths))
 #test loading multiple models
 
-path = 'C:\Program Files\ProjectDR\Model\osg-data-master\cessna.osg'
+#path = 'C:\Program Files\ProjectDR\Model\osg-data-master\cessna.osg'
+path = 'C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\cessna.osg'
 
 polyDict = polyModelDict()
 
