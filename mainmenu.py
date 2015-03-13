@@ -3,6 +3,7 @@ from PyQt4 import QtGui, QtCore
 from chooseTest import RunTest
 from results import ResultsWindow
 from maintab import MainTabWidget
+from troubleshooting import Help
 '''
 Start Page with Setup Instructions
 '''
@@ -20,10 +21,12 @@ class MainWindow(QtGui.QWidget):
         tab1 = MainTabWidget()  
         tab2 = RunTest()
         tab3 = ResultsWindow()
+        tab4 = Help()
 
         tabs.addTab(tab1,"Main")
         tabs.addTab(tab2,"Choose Test")
         tabs.addTab(tab3,"Results")
+        tabs.addTab(tab4, "Troubleshooting")
 
 
         menu_bar = QtGui.QMenuBar() 
@@ -56,16 +59,10 @@ class MainWindow(QtGui.QWidget):
         # Create the window     
         self.resize(800, 600)         # Width: 800 pixels, height 600 pixels
         self.centerWindow()           # Center the box on the users screen              
-        self.setWindowTitle('Main Menu')
+        self.setWindowTitle('302 Project')
         # Show our pigeot pokemon icon
         self.setWindowIcon(QtGui.QIcon('pigeot_icon.png'))      
         self.show()
-        
-
-     # Do something when the "Ok" button is clicked
-    def buttonClicked(self):
-        sender = self.sender()
-        self.statusBar().showMessage(sender.text() + ' was pressed')
         
     # A function to move the window to the center of the users screen
     def centerWindow(self):

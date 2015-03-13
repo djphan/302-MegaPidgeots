@@ -26,7 +26,7 @@ class FileWizard(QtGui.QWidget):
 
     # Uses file dialog to get path to module, returns a string
     def openFile(self):
-        f = QtGui.QFileDialog.getOpenFileName(self, "Open Data File", "")
+        f = QtGui.QFileDialog.getOpenFileName(self, "Open Module", "")
         # convert filepath to a string
         f = str(f)
         print(f)                      

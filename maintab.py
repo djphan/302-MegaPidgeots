@@ -13,8 +13,6 @@ class MainTabWidget(QtGui.QWidget):
         
     # Initilize the UI of the window
     def initUI(self):
-
-
         page = QtGui.QVBoxLayout()
 
         # Instructions text box
@@ -38,9 +36,7 @@ class MainTabWidget(QtGui.QWidget):
         self.img = QtGui.QLabel(self)
         self.img.setPixmap(pixmap)
             
-        # Ok and Exit buttons
-        okButton = QtGui.QPushButton("OK")
-        okButton.clicked.connect(self.buttonClicked)
+        # Exit buttons
         cancelButton = QtGui.QPushButton("Exit")
         cancelButton.clicked.connect(QtCore.QCoreApplication.instance().quit)
 
@@ -54,7 +50,6 @@ class MainTabWidget(QtGui.QWidget):
 
         hbuttons = QtGui.QHBoxLayout()
         hbuttons.addStretch(1)
-        hbuttons.addWidget(okButton)
         hbuttons.addWidget(cancelButton)
         vbuttons = QtGui.QVBoxLayout()
         vbuttons.addStretch(1)
@@ -71,28 +66,8 @@ class MainTabWidget(QtGui.QWidget):
         
         mainVbox.addWidget(menu_bar)
 
-        self.setLayout(page)     
-
-        # Create the window     
-        self.resize(800, 600)         # Width: 800 pixels, height 600 pixels
-        self.centerWindow()           # Center the box on the users screen              
-        self.setWindowTitle('Main Menu')
-        # Show our pigeot pokemon icon
-        self.setWindowIcon(QtGui.QIcon('pigeot_icon.png'))      
+        self.setLayout(page)       
         self.show()
-        
-
-     # Do something when the "Ok" button is clicked
-    def buttonClicked(self):
-        sender = self.sender()
-        self.statusBar().showMessage(sender.text() + ' was pressed')
-        
-    # A function to move the window to the center of the users screen
-    def centerWindow(self):
-        qr = self.frameGeometry()
-        cp = QtGui.QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
                 
 def main():
     app = QtGui.QApplication(sys.argv)

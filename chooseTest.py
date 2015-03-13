@@ -70,13 +70,6 @@ class RunTest(QtGui.QWidget):
 
         # Create the drop down list on the window
         combo.activated['QString'].connect(self.onActivated)    
-         
-        # Create the window     
-        self.resize(800, 600)         # Width: 800 pixels, height 600 pixels
-        self.centerWindow()           # Center the box on the users screen              
-        self.setWindowTitle('Create a Test Wizard')
-        # Show our pigeot pokemon icon
-        self.setWindowIcon(QtGui.QIcon('pigeot_icon.png'))      
         self.show()
 
     # When the user selects an item from the list, display its information
@@ -110,14 +103,6 @@ class RunTest(QtGui.QWidget):
     def buttonClicked(self):
         sender = self.sender()
         self.statusBar().showMessage(sender.text() + ' was pressed')
-
-    # A function to move the window to the center of the users screen
-    def centerWindow(self):
-        qr = self.frameGeometry()
-        cp = QtGui.QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
-
       
 def main():
     app = QtGui.QApplication(sys.argv)
