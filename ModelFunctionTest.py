@@ -3,6 +3,7 @@ import SceneManager
 import operator
 import codecs
 import glob
+import time
 
 class polyModelDict():
 	def __init__(self):
@@ -110,7 +111,7 @@ class polyModelDict():
 		return 0
 
 
-
+print "---------------------------------------"
 #model path and name
 #paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
 paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
@@ -129,12 +130,13 @@ name = "hooooooooooo- "
 #test loading multiple models
 
 #path = 'C:\Program Files\ProjectDR\Model\osg-data-master\cessna.osg'
-path = 'C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\cessna.osg'
+path = 'C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\cow.osg'
 
 polyDict = polyModelDict()
 
 polyDict.loadPolygonModel(path,name)
 
+"""
 print "position: "+str(polyDict.getPositionOffset(name))
 print "rotation: "+str(polyDict.getRotationOffset(name))
 print "scale: "+str(polyDict.getScale(name))
@@ -144,7 +146,19 @@ polyDict.setScale(name,(1.0,2.0,4.0))
 print "position: "+str(polyDict.getPositionOffset(name))
 print "rotation: "+str(polyDict.getRotationOffset(name))
 print "scale: "+str(polyDict.getScale(name))
+"""
 
+startX = 10.0
+startY = 0.0
+startZ = 0.0
+
+polyDict.setPositionOffset(name, (startX, startY, startZ))
+while (True):
+#while (polyDict.getPositionOffset(name)[0] > 0.0):
+	time.sleep(2)
+	startX -= 0.5
+	print(polyDict.getPositionOffset(name)[0])
+	polyDict.setPositionOffset(name, (startX, startY, startZ))
 
 #write to file
 #something.encode("utf-8")
