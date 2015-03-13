@@ -52,7 +52,7 @@ class polyModelDict():
 			return 1
 		return 0
 
-	def setPositionOffset(self,name,quat):
+	def setRotationOffset(self,name,quat):
 		try:
 			self.polyModelDict[name].setRotationOffset(quat)
 		except:
