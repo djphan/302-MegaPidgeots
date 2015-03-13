@@ -30,8 +30,8 @@ class polyModelDict():
 				print("loadPolygonModel - a model with specified name already exists")
 		except:
 			print("loadPolygonModel - something happened")
-			print("path: "+path)
-			print("name: "+name)
+			#print("path: "+path)
+			#print("name: "+name)
 			return 1
 		return 0
 
@@ -41,7 +41,7 @@ class polyModelDict():
 			self.polyModelDict.pop(name)
 		except:
 			print("deletePolygonModel - something happened")
-			print("name: "+name)
+			#print("name: "+name)
 			return 1
 		return 0
 
@@ -52,7 +52,7 @@ class polyModelDict():
 			return 1
 		return 0
 
-	def setPositionOffset(self,name,quat):
+	def setRotationOffset(self,name,quat):
 		try:
 			self.polyModelDict[name].setRotationOffset(quat)
 		except:
@@ -76,8 +76,8 @@ class polyModelDict():
 
 
 #model path and name
-paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
-#paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\glider.osg")
+paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
+#paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\glider.osg")
 name = "hooooooooooo- "
 
 #optitrack stuff
@@ -96,16 +96,15 @@ polydict = polyModelDict()
 modellist = []
 for i in range(3):
 	polydict.loadPolygonModel(paths[i],name+str(i))
-
+	polydict.setPositionOffset(name+str(i),(90,90,90))
 #print(polyModelDict)
-print(polydict.getSize())
+print("Size Before: "+str(polydict.getSize()))
 
 
+#for i in range(3):
+	#polydict.deletePolygonModel(name+str(i))
 
-for i in range(3):
-	polydict.deletePolygonModel(name+str(i))
-
-print(polydict.getSize())
+print("Size After: "+str(polydict.getSize()))
 
 
 #write to file
