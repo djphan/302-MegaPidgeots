@@ -1,7 +1,8 @@
 import sys
 from PyQt4 import QtGui, QtCore
 from chooseTest import ChooseTestWindow
-
+from results import ResultsWindow
+from maintab import MainTabWidget
 '''
 Start Page with Setup Instructions
 '''
@@ -16,69 +17,21 @@ class MainWindow(QtGui.QWidget):
 
         #Tabs
         tabs = QtGui.QTabWidget()
-        tab1 = QtGui.QWidget()   
+        tab1 = MainTabWidget()  
         tab2 = QtGui.QWidget()
-        tab3 = QtGui.QWidget()
-
-        # Create a window for our layouts
-        page = QtGui.QVBoxLayout(tab1)
-        page2 = QtGui.QVBoxLayout(tab2)
-        page3 = QtGui.QVBoxLayout(tab3)
+        tab3 = ResultsWindow()
 
         tabs.addTab(tab1,"Main")
         tabs.addTab(tab2,"Choose Test")
         tabs.addTab(tab3,"Results")
 
-        # Instructions text box
-        instruText = QtGui.QLabel("How to Cailbrate OptiTrack")
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        instruText.setFont(font)
-
-        # Instructions
-        self.step1 = QtGui.QLabel("Step 1: Select Cailbrate", self)
-        self.step2 = QtGui.QLabel("Step 2: Wave Wand Around", self)
-        self.step3 = QtGui.QLabel("Step 3: Apply Cailbrations", self)
 
         menu_bar = QtGui.QMenuBar() 
         file = menu_bar.addMenu("&File") 
         help = menu_bar.addMenu("&Help")
         
-        # Test image
-        pixmap = QtGui.QPixmap('pidgey.png')
-        pixmap = pixmap.scaledToHeight(200)
-        self.img = QtGui.QLabel(self)
-        self.img.setPixmap(pixmap)
-            
-        # Ok and Exit buttons
-        okButton = QtGui.QPushButton("OK")
-        okButton.clicked.connect(self.buttonClicked)
-        cancelButton = QtGui.QPushButton("Exit")
-        cancelButton.clicked.connect(QtCore.QCoreApplication.instance().quit)
 
-        exitAction = QtGui.QAction(QtGui.QIcon('pigeot_icon.png'), '&Exit', self)        
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(QtGui.qApp.quit)
-
-        addTestAction = QtGui.QAction(QtGui.QIcon('pigeot_icon.png'), '&AddTest' , self)
-        addTestAction.setStatusTip("Add Test")
-
-        hbuttons = QtGui.QHBoxLayout()
-        hbuttons.addStretch(1)
-        hbuttons.addWidget(okButton)
-        hbuttons.addWidget(cancelButton)
-        vbuttons = QtGui.QVBoxLayout()
-        vbuttons.addStretch(1)
-        vbuttons.addLayout(hbuttons)
         
-        page.addWidget(instruText)
-        page.addWidget(self.step1)
-        page.addWidget(self.step2)
-        page.addWidget(self.step3)
-        page.addWidget(self.img)
-        page.addWidget(cancelButton)
-
         mainVbox = QtGui.QVBoxLayout()
         
         mainVbox.addWidget(tabs)
