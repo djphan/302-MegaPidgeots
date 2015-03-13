@@ -4,6 +4,10 @@ import operator
 import codecs
 import glob
 import time
+import math
+
+def euclid(c1, c2):
+	return ( math.sqrt( (c2[0] - c1[0])**2 + (c2[1] - c1[1])**2 + (c2[2] - c1[2])**2 ) )
 
 class polyModelDict():
 	def __init__(self):
@@ -115,7 +119,9 @@ print "---------------------------------------"
 #model path and name
 #paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
 paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
-name = "hooooooooooo- "
+name = "Cow1"
+name2 = "Cow2"
+name3 = "Cow3"
 
 #optitrack stuff
 #local_IP = "25.79.169.119"
@@ -135,6 +141,7 @@ path = 'C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\cow.osg'
 polyDict = polyModelDict()
 
 polyDict.loadPolygonModel(path,name)
+polyDict.loadPolygonModel(path,name2)
 
 """
 print "position: "+str(polyDict.getPositionOffset(name))
@@ -150,15 +157,27 @@ print "scale: "+str(polyDict.getScale(name))
 
 startX = 10.0
 startY = 0.0
-startZ = 0.0
+startZ = 10.0
 
 polyDict.setPositionOffset(name, (startX, startY, startZ))
-while (True):
-#while (polyDict.getPositionOffset(name)[0] > 0.0):
-	time.sleep(2)
-	startX -= 0.5
-	print(polyDict.getPositionOffset(name)[0])
+polyDict.setPositionOffset(name2, (-startX, startY, startZ))
+polyDict.setScale(name,(.1,.1,.1))
+polyDict.setScale(name2,(.1,.1,.1))
+
+a = polyDict.getPositionOffset(name)
+b = polyDict.getPositionOffset(name2)
+while ( euclid(a,b) > .8):
+	time.sleep(.125)
+	startX -= 0.125
+	startZ -= 0.125
 	polyDict.setPositionOffset(name, (startX, startY, startZ))
+	polyDict.setPositionOffset(name2, (-startX, startY, -startZ))
+	a = polyDict.getPositionOffset(name)
+	b = polyDict.getPositionOffset(name2)
+
+polyDict.loadPolygonModel(path, name3)
+polyDict.setScale(name3,(.1,.1,.1))
+polyDict.setPositionOffset(name3, (0.0, 0.0, .5))
 
 #write to file
 #something.encode("utf-8")
