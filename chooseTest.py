@@ -2,6 +2,7 @@ import sys
 from PyQt4 import QtGui, QtCore
 
 '''
+
 The RunTest class is a widget where the user can select a 
 premade test from a drop-down list. Once the user chooses a test, the
 description matching the test is displayed along with related images.
@@ -40,7 +41,12 @@ class RunTest(QtGui.QWidget):
         okButton.clicked.connect(self.buttonClicked)
         cancelButton = QtGui.QPushButton("Exit")
         cancelButton.clicked.connect(QtCore.QCoreApplication.instance().quit)
-        # Formatting for the Ok and Exit Buttons        
+
+        exitAction = QtGui.QAction(QtGui.QIcon('pigeot_icon.png'), '&Exit', self)        
+        exitAction.setShortcut('Ctrl+Q')
+        exitAction.setStatusTip('Exit application')
+        exitAction.triggered.connect(QtGui.qApp.quit)
+
         hbuttons = QtGui.QHBoxLayout()
         hbuttons.addStretch(1)
         hbuttons.addWidget(okButton)
@@ -72,7 +78,7 @@ class RunTest(QtGui.QWidget):
         # Show our pigeot pokemon icon
         self.setWindowIcon(QtGui.QIcon('pigeot_icon.png'))      
         self.show()
-        
+
     # When the user selects an item from the list, display its information
     def onActivated(self, text):
         if (text == "Test #1"):
@@ -87,10 +93,12 @@ class RunTest(QtGui.QWidget):
         elif (text == "Test #4"):
             text = "Tests all vertebre."
             pixmap = QtGui.QPixmap('pigeot_icon.png')
-        else:
+        elif (text == "Test #5"):
             text = "Tests vertebre for sections C1 through C7 and L1 through L5."
             pixmap = QtGui.QPixmap('big_bird.png')
-        
+        else:
+            text = "Custom Test"
+            pixmap = QtGui.QPixmap('big_bird.png')
         # Change displayed text and image
         pixmap = pixmap.scaledToHeight(400)
         self.descriptionText.setText(text)
@@ -102,17 +110,20 @@ class RunTest(QtGui.QWidget):
     def buttonClicked(self):
         sender = self.sender()
         self.statusBar().showMessage(sender.text() + ' was pressed')
-        
+
     # A function to move the window to the center of the users screen
     def centerWindow(self):
         qr = self.frameGeometry()
         cp = QtGui.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-                
-def main():  
+
+      
+def main():
     app = QtGui.QApplication(sys.argv)
+
     window = RunTest()
+
     sys.exit(app.exec_())
 
 
