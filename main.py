@@ -1,12 +1,7 @@
 import ClientHandler
 import SceneManager
 import sys
-sys.path.insert(0, "C:\\302thing\\302-MegaPidgeots") #set to project folder
-
-from util import util
-from polyModel import polyModel
-from polyModel import polyModelDict
-#import mainmenu
+sys.path.insert(0, "C:\\302thing\\302-MegaPidgeots") #set path to project folder
 
 #from PyQt4 import QtGui, QtCore
 import codecs
@@ -15,22 +10,26 @@ import time
 import math
 import random
 
+from util import util
+from polyModel import polyModel
+from polyModel import polyModelDict
+#import mainmenu
 
 print "---------------------------------------"
 #model path and name
 #paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
-paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
+#paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
 name = "Cow1"
 name2 = "Cow2"
 name3 = "Cow3"
 
 #optitrack stuff
-#local_IP = "25.79.169.119"
-#OptiTrack_IP = "25.79.169.119"
-#OptiTrack_DataPort = 1511
-#OptiTrack_CmdPort = 1510
+local_IP = "172.28.25.246"
+OptiTrack_IP = "172.28.25.246"
+OptiTrack_DataPort = 1511
+OptiTrack_CmdPort = 1510
 
-#ClientHandler.connect(local_IP,OptiTrack_IP,OptiTrack_DataPort,OptiTrack_CmdPort,ClientHandler.ConnectionType.Multicast)
+ClientHandler.connect(local_IP,OptiTrack_IP,OptiTrack_DataPort,OptiTrack_CmdPort,ClientHandler.ConnectionType.Multicast)
 
 #load model from path
 #modelist = list([0]*len(paths))
@@ -80,6 +79,12 @@ while ( util.euclid(a,b) > .8):
 model3 = polyModel(path,name3)
 model3.setScale(.1,.1,.1)
 model3.setPositionOffset(0.0, 0.0,.5)
+model3.attachRigidBodyById(0)
+time.sleep(10)
+
+model1.deleteModel()
+model2.deleteModel()
+model3.deleteModel()
 
 '''
 app = QtGui.QApplication(sys.argv)

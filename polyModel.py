@@ -7,6 +7,7 @@ class polyModel():
 		self.model = None
 		self.name = name
 		self.path = path
+		self.rigidBodyId = None
 		if not(SceneManager.doesModelExist(name)):
 			SceneManager.loadPolygonModel(path,name)
 			self.model = SceneManager.getModel(name)
@@ -15,7 +16,7 @@ class polyModel():
 			self.model = SceneManager.getModel(name)
 
 	#TODO: test to see if destructor actually works
-	def __del__(self):
+	def deleteModel(self):
 		SceneManager.deleteModel(self.getName())
 		return
 
@@ -30,13 +31,12 @@ class polyModel():
 			print "Model is returning None"
 		return self.model
 
-	#TODO: test what it returns when there are no rigidbody attached
-	#also not working...?
-	def getRigidBody(self):
-		return self.getModel().getRigidBody()
+	def getRigidBodyId(self):
+		return self.rigidBodyId
 
-	def attachRigidBody(self,rigid_body):
-		self.getModel().attachRigidBody(rigid_body)
+	def attachRigidBodyById(self,id):
+		self.rigidBodyId = id
+		self.getModel().attachRigidBodyById(id)
 		return 
 
 	#Set/Get Translation of model in X,Y,Z
