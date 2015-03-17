@@ -1,10 +1,14 @@
 import ClientHandler
 import SceneManager
+import sys
+sys.path.insert(0, "C:\\302thing\\302-MegaPidgeots") #set to project folder
 
 from util import util
-from ModelFunctionTest import polyModel
-from ModelFunctionTest import polyModelDict
+from polyModel import polyModel
+from polyModel import polyModelDict
+#import mainmenu
 
+#from PyQt4 import QtGui, QtCore
 import codecs
 import glob
 import time
@@ -77,6 +81,11 @@ model3 = polyModel(path,name3)
 model3.setScale(.1,.1,.1)
 model3.setPositionOffset(0.0, 0.0,.5)
 
+'''
+app = QtGui.QApplication(sys.argv)
+window = MainWindow()
+sys.exit(app.exec_())
+'''
 
 #write to file
 #something.encode("utf-8")
