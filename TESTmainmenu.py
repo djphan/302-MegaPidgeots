@@ -2,7 +2,7 @@ import sys
 from PyQt4 import QtGui, QtCore
 from chooseTest import RunTest
 from results import ResultsWindow
-from maintab import MainTabWidget
+from TESTmaintab import MainTabWidget
 from troubleshooting import Help
 '''
 Start Page with Setup Instructions
@@ -19,19 +19,21 @@ class MainWindow(QtGui.QWidget):
         #Tabs
         tabs = QtGui.QTabWidget()
         tab1 = MainTabWidget()  
-        tab2 = RunTest()
-        tab3 = ResultsWindow()
-        tab4 = Help()
+        #tab2 = RunTest()
+        #tab3 = ResultsWindow()
+        #tab4 = Help()
 
         tabs.addTab(tab1,"Main")
-        tabs.addTab(tab2,"Choose Test")
-        tabs.addTab(tab3,"Results")
-        tabs.addTab(tab4, "Troubleshooting")
+        #tabs.addTab(tab2,"Choose Test")
+        #tabs.addTab(tab3,"Results")
+        #tabs.addTab(tab4, "Troubleshooting")
 
 
         menu_bar = QtGui.QMenuBar() 
         file = menu_bar.addMenu("&File") 
         help = menu_bar.addMenu("&Help")
+        
+
         
         mainVbox = QtGui.QVBoxLayout()
         
