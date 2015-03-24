@@ -31,10 +31,8 @@ class Help(QtGui.QWidget):
         combo.addItem("Even more issues")    
         
         # Test image
-        pixmap = QtGui.QPixmap('pidgey.png')
-        pixmap = pixmap.scaledToHeight(400)
-        self.img = QtGui.QLabel(self)
-        self.img.setPixmap(pixmap)
+        self.pic = QtGui.QLabel()
+        self.pic.setPixmap(QtGui.QPixmap('pidgey.png'))
             
         # Ok and Exit buttons
         cancelButton = QtGui.QPushButton("Exit")
@@ -61,7 +59,7 @@ class Help(QtGui.QWidget):
         mainVbox.addWidget(instruText)
         mainVbox.addWidget(combo)
         mainVbox.addWidget(self.descriptionText)
-        mainVbox.addWidget(self.img)
+        mainVbox.addWidget(self.pic)
         mainVbox.addLayout(vbuttons)
         self.setLayout(mainVbox)
 
@@ -73,27 +71,25 @@ class Help(QtGui.QWidget):
     def onActivated(self, text):
         if (text == "Calibrating"):
             text = "CALIBRATION ADVICE!!.."
-            pixmap = QtGui.QPixmap('pidgey.png')
+            self.pic.setPixmap(QtGui.QPixmap('pidgey.png'))
         elif (text == "Troubleshooting"):
             text = "TROUBLESHOOTING ADVICE."
-            pixmap = QtGui.QPixmap('Pidgeotto.png')
+            self.pic.setPixmap(QtGui.QPixmap('Pidgeotto.png'))
         elif (text == "Help"):
             text = "More help stuff."
-            pixmap = QtGui.QPixmap('pidgeot.png')
+            self.pic.setPixmap(QtGui.QPixmap('pidgeot.png'))
         elif (text == "More issues"):
             text = "All the issues in the world"
-            pixmap = QtGui.QPixmap('pigeot_icon.png')
+            self.pic.setPixmap(QtGui.QPixmap('pigeot_icon.png'))
         elif (text == "Even more issues"):
             text = "More issues could go here too"
-            pixmap = QtGui.QPixmap('big_bird.png')
+            self.pic.setPixmap(QtGui.QPixmap('big_bird.png'))
         else:
             text = "Custom Test"
-            pixmap = QtGui.QPixmap('big_bird.png')
+            self.pic.setPixmap(QtGui.QPixmap('big_bird.png'))
         # Change displayed text and image
-        pixmap = pixmap.scaledToHeight(400)
         self.descriptionText.setText(text)
         self.descriptionText.adjustSize()  
-        self.img.setPixmap(pixmap)
 
       
 def main():

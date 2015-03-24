@@ -33,10 +33,8 @@ class ResultsWindow(QtGui.QWidget):
         help = menu_bar.addMenu("&Help")
         
         # Test image
-        pixmap = QtGui.QPixmap('pidgey.png')
-        pixmap = pixmap.scaledToHeight(200)
-        self.img = QtGui.QLabel(self)
-        self.img.setPixmap(pixmap)
+        pic = QtGui.QLabel()
+        pic.setPixmap(QtGui.QPixmap('pidgey.png'))
             
         # Ok and Exit buttons
         okButton = QtGui.QPushButton("OK")
@@ -64,7 +62,7 @@ class ResultsWindow(QtGui.QWidget):
         page.addWidget(self.step1)
         page.addWidget(self.step2)
         page.addWidget(self.step3)
-        page.addWidget(self.img)
+        page.addWidget(pic)
         page.addWidget(cancelButton)
 
         mainVbox = QtGui.QVBoxLayout()

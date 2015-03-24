@@ -31,10 +31,9 @@ class RunTest(QtGui.QWidget):
         combo.addItem("Test #5")    
         
         # Test image
-        pixmap = QtGui.QPixmap('pidgey.png')
-        pixmap = pixmap.scaledToHeight(400)
-        self.img = QtGui.QLabel(self)
-        self.img.setPixmap(pixmap)
+
+        self.pic = QtGui.QLabel()
+        self.pic.setPixmap(QtGui.QPixmap('pidgey.png'))
             
         # Ok and Exit buttons
         okButton = QtGui.QPushButton("OK")
@@ -64,7 +63,7 @@ class RunTest(QtGui.QWidget):
         mainVbox.addWidget(instruText)
         mainVbox.addWidget(combo)
         mainVbox.addWidget(self.descriptionText)
-        mainVbox.addWidget(self.img)
+        mainVbox.addWidget(self.pic)
         mainVbox.addLayout(vbuttons)
         self.setLayout(mainVbox)
 
@@ -76,27 +75,25 @@ class RunTest(QtGui.QWidget):
     def onActivated(self, text):
         if (text == "Test #1"):
             text = "Tests vertebre for sections C1 through C7."
-            pixmap = QtGui.QPixmap('pidgey.png')
+            self.pic.setPixmap(QtGui.QPixmap('pidgey.png'))
         elif (text == "Test #2"):
             text = "Tests vertebre for sections T1 through T12."
-            pixmap = QtGui.QPixmap('Pidgeotto.png')
+            self.pic.setPixmap(QtGui.QPixmap('Pidgeotto.png'))
         elif (text == "Test #3"):
             text = "Tests vertebre for sections L1 through L5."
-            pixmap = QtGui.QPixmap('pidgeot.png')
+            self.pic.setPixmap(QtGui.QPixmap('pidgeot.png'))
         elif (text == "Test #4"):
             text = "Tests all vertebre."
-            pixmap = QtGui.QPixmap('pigeot_icon.png')
+            self.pic.setPixmap(QtGui.QPixmap('pigeot_icon.png'))
         elif (text == "Test #5"):
             text = "Tests vertebre for sections C1 through C7 and L1 through L5."
-            pixmap = QtGui.QPixmap('big_bird.png')
+            self.pic.setPixmap(QtGui.QPixmap('big_bird.png'))
         else:
             text = "Custom Test"
-            pixmap = QtGui.QPixmap('big_bird.png')
+            self.pic.setPixmap(QtGui.QPixmap('big_bird.png'))
         # Change displayed text and image
-        pixmap = pixmap.scaledToHeight(400)
         self.descriptionText.setText(text)
         self.descriptionText.adjustSize()  
-        self.img.setPixmap(pixmap)
       
      # Do something when the "Ok" button is clicked
      # TODO: We want to make the OK button do something useful :)

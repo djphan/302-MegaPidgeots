@@ -31,39 +31,20 @@ class MainTabWidget(QtGui.QWidget):
         help = menu_bar.addMenu("&Help")
         
         # Test image
-        pixmap = QtGui.QPixmap('pidgey.png')
-        pixmap = pixmap.scaledToHeight(200)
-        self.img = QtGui.QLabel(self)
-        self.img.setPixmap(pixmap)
-            
-        # Exit buttons
-        cancelButton = QtGui.QPushButton("Exit")
-        cancelButton.clicked.connect(QtCore.QCoreApplication.instance().quit)
 
-        exitAction = QtGui.QAction(QtGui.QIcon('pigeot_icon.png'), '&Exit', self)        
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(QtGui.qApp.quit)
+        pic = QtGui.QLabel()
+        pic.setPixmap(QtGui.QPixmap('pidgey.png'))
 
         addTestAction = QtGui.QAction(QtGui.QIcon('pigeot_icon.png'), '&AddTest' , self)
         addTestAction.setStatusTip("Add Test")
-
-        hbuttons = QtGui.QHBoxLayout()
-        hbuttons.addStretch(1)
-        hbuttons.addWidget(cancelButton)
-        vbuttons = QtGui.QVBoxLayout()
-        vbuttons.addStretch(1)
-        vbuttons.addLayout(hbuttons)
         
         page.addWidget(instruText)
         page.addWidget(self.step1)
         page.addWidget(self.step2)
         page.addWidget(self.step3)
-        page.addWidget(self.img)
-        page.addWidget(cancelButton)
+        page.addWidget(pic)
 
         mainVbox = QtGui.QVBoxLayout()
-        
         mainVbox.addWidget(menu_bar)
 
         self.setLayout(page)       
