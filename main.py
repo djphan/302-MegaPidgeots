@@ -20,6 +20,7 @@ print "---------------------------------------"
 #model path and name
 #paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
 #paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
+buttonpath = "C:\Users\w\Desktop\Button2.OSGB"
 name = "Cow1"
 name2 = "Cow2"
 name3 = "Cow3"
@@ -43,7 +44,7 @@ path = 'C:\Users\w\Documents\Models\osg-data-master\cow.osg'
 
 model1 = polyModel(path,name)
 model2 = polyModel(path,name2)
-button = button(path,"button")
+button = button(buttonpath,"button")
 
 """
 print "position: "+str(model1.getPositionOffset())
