@@ -2,7 +2,7 @@ import ClientHandler
 import SceneManager
 import sys
 sys.path.insert(0, "C:\\302thing\\302-MegaPidgeots") #set path to project folder
-sys.path.insert(0, "C:\\Users\\Aedan\\Desktop\\Homework Folder\\CMPUT 302\\302-MegaPidgeots")
+
 #from PyQt4 import QtGui, QtCore
 import codecs
 import glob
@@ -13,6 +13,7 @@ import random
 from util import util
 from polyModel import polyModel
 from polyModel import polyModelDict
+from button import button
 #import mainmenu
 
 print "---------------------------------------"
@@ -42,6 +43,7 @@ path = 'C:\Users\w\Documents\Models\osg-data-master\cow.osg'
 
 model1 = polyModel(path,name)
 model2 = polyModel(path,name2)
+button = button(path,"button")
 
 """
 print "position: "+str(model1.getPositionOffset())

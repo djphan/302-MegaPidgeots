@@ -49,7 +49,7 @@ class polyModel():
 	def getAbsPositionOffset(self):
 		if getRigidBodyId() == None:
 			return getPositionOffset()
-		else
+		else:
 			return tuple(map(operator.add, self.getPositionOffset(), self.getRigidBody().getPosition()))
 		
 	def setPositionOffset(self,x,y,z):
@@ -66,8 +66,8 @@ class polyModel():
 	def getAbsRotationOffset(self):
 		if getRigidBodyId() == None:
 			return getRotationOffset()
-		else
-		return tuple(map(operator.add, self.getRotationOffset(), self.getRigidBody().getRotation()))
+		else:
+			return tuple(map(operator.add, self.getRotationOffset(), self.getRigidBody().getRotation()))
 	
 	def setRotationOffset(self,x,y,z,w):
 		try:

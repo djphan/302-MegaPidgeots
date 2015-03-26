@@ -39,3 +39,5 @@ class button():
 
 			return (trackPos[0]>=X1 and trackPos[0]<=X2) and (trackPos[0]>=Y1 and trackPos[0]<=Y2) and (abs(trackPos[2] - buttonPos[2]) < pressedDist)
 
+		def removeButton(self):
+			self.buttonModel.deleteModel()
