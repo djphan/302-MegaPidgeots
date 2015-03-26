@@ -29,3 +29,6 @@ If you have created a new feature on a separate branch and are ready to add it t
 3) Set "base" to master and set "compare" to your branch name
 4) Post the resulting pull request link to the slack for team members to see
 ```
+
+Skeleton Model - http://www.turbosquid.com/FullPreview/Index.cfm/ID/212223 - Royalty Free License - Created by Serac
+All other models created by Aedan using 3DSMax 2012.

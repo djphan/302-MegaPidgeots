@@ -5,6 +5,7 @@ they want to open in their file system with a GUI.
 """
 import sys
 from PyQt4 import QtGui
+import SceneManager
 
 class FileWizard(QtGui.QWidget):
     
@@ -29,7 +30,8 @@ class FileWizard(QtGui.QWidget):
         f = QtGui.QFileDialog.getOpenFileName(self, "Open Module", "")
         # convert filepath to a string
         f = str(f)
-        print(f)                      
+        print(f)
+        SceneManager.loadPolygonModel(f,"whateveryoufeellikeman")                      
         
         # Not sure what to do with filepath, so im setting it to a variable for now
         self.filePath = f;
