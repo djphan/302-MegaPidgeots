@@ -1,5 +1,6 @@
 from PyQt4 import QtCore, QtGui
 from calibrationWizard import CalibrationWizard
+#import SceneManager
 
 class TabDialog(QtGui.QDialog):
 	def __init__(self, parent=None):
@@ -11,10 +12,8 @@ class TabDialog(QtGui.QDialog):
 		tabWidget.addTab(SetupTab(), "Set Up Test")
 		tabWidget.addTab(ResultsTab(), "Results")
 
-		# Ok and exit buttons
-		buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
-
-		buttonBox.accepted.connect(self.accept)
+		# Exit buttons
+		buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Close)
 		buttonBox.rejected.connect(self.reject)
 
 		mainLayout = QtGui.QVBoxLayout()
@@ -55,22 +54,19 @@ class SetupTab(QtGui.QWidget):
 		# Instructions text box
 		instruText = QtGui.QLabel("Choose a test from the drop-down menu.")
 		font = QtGui.QFont()
-		font.setPointSize(18)
+		font.setPointSize(14)
 		instruText.setFont(font)
 
 		# Items that can be selected from the drop-down menu
 		combo = QtGui.QComboBox(self)
-		combo.addItem("Test #1")
-		combo.addItem("Test #2")
-		combo.addItem("Test #3")
-		combo.addItem("Test #4")
-		combo.addItem("Test #5")
+		combo.addItem("Skeleton Full")
+		combo.addItem("Skeleton Partial")
 
 		# Test image
-		# pixmap = QtGui.QPixmap('pidgey.png')
-		#pixmap = pixmap.scaledToHeight(400)
-		#self.img = QtGui.QLabel(self)
-		#self.img.setPixmap(pixmap)
+		self.img = QtGui.QLabel(self)
+		pixmap = QtGui.QPixmap('spooky.png')
+		pixmap = pixmap.scaledToHeight(400)
+		self.img.setPixmap(pixmap)
 
 		# Set the default test to be displayed on launch in text description box
 		self.descriptionText = QtGui.QLabel("Tests vertebrae for sections C1 through C7.", self)
@@ -81,7 +77,7 @@ class SetupTab(QtGui.QWidget):
 		mainVbox.addWidget(instruText)
 		mainVbox.addWidget(combo)
 		mainVbox.addWidget(self.descriptionText)
-		#mainVbox.addWidget(self.img)
+		mainVbox.addWidget(self.img)
 		self.setLayout(mainVbox)
 
 		# Create the drop down list on the window
@@ -90,29 +86,19 @@ class SetupTab(QtGui.QWidget):
 
 	# When the user selects an item from the list, display its information
 	def onActivated(self, text):
-		if text == "Test #1":
-			text = "Tests vertebrae for sections C1 through C7."
-			# pixmap = QtGui.QPixmap('pidgey.png')
-		elif text == "Test #2":
-			text = "Tests vertebrae for sections T1 through T12."
-			# pixmap = QtGui.QPixmap('Pidgeotto.png')
-		elif text == "Test #3":
-			text = "Tests vertebrae for sections L1 through L5."
-			# pixmap = QtGui.QPixmap('pidgeot.png')
-		elif text == "Test #4":
-			text = "Tests all vertebrae."
-			# pixmap = QtGui.QPixmap('pigeot_icon.png')
-		elif text == "Test #5":
-			text = "Tests vertebrae for sections C1 through C7 and L1 through L5."
-			# pixmap = QtGui.QPixmap('big_bird.png')
+		if text == "Skeleton Full":
+			text = "Tests vertebrae on the full skeleton model."
+			pixmap = QtGui.QPixmap('spooky.png')
+
 		else:
-			text = "Custom Test"
-			# pixmap = QtGui.QPixmap('big_bird.png')
+			text = "Tests vertebrae on the partial skeleton model."
+			pixmap = QtGui.QPixmap('spooky2.png')
+
 		# Change displayed text and image
-		# pixmap = pixmap.scaledToHeight(400)
+		pixmap = pixmap.scaledToHeight(400)
 		self.descriptionText.setText(text)
 		self.descriptionText.adjustSize()
-		#self.img.setPixmap(pixmap)
+		self.img.setPixmap(pixmap)
 
 
 class ResultsTab(QtGui.QWidget):
