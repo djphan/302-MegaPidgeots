@@ -2,6 +2,7 @@ import ClientHandler
 import SceneManager
 import sys
 sys.path.insert(0, "C:\\302thing\\302-MegaPidgeots") #set path to project folder
+sys.path.insert(0, "C:\\Users\\Aedan\\Desktop\\Homework Folder\\CMPUT 302\\302-MegaPidgeots")
 
 #from PyQt4 import QtGui, QtCore
 import codecs
