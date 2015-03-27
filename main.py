@@ -21,10 +21,9 @@ print "---------------------------------------"
 #model path and name
 #paths = glob.glob("C:\Users\w\Documents\Models\osg-data-master\*.osg")
 #paths = glob.glob("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\*.osg")
-buttonpath = "C:\Users\w\Desktop\Button2.OSGB"
-name = "Cow1"
-name2 = "Cow2"
-name3 = "Cow3"
+buttonpath = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Button2.osgb"
+handpath = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\hand.osgb"
+markerpath = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Marker.osgb"
 
 #optitrack stuff
 local_IP = "172.28.25.246"
@@ -34,17 +33,10 @@ OptiTrack_CmdPort = 1510
 
 ClientHandler.connect(local_IP,OptiTrack_IP,OptiTrack_DataPort,OptiTrack_CmdPort,ClientHandler.ConnectionType.Multicast)
 
-#load model from path
-#modelist = list([0]*len(paths))
-#test loading multiple models
-
-path = 'C:\Users\w\Documents\Models\osg-data-master\cow.osg'
+#path = 'C:\Users\w\Documents\Models\osg-data-master\cow.osg'
 #path = 'C:\Program Files\ProjectDR\Model\osg-data-master\cow.osg'
 #path = 'C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\cow.osg'
 
-
-model1 = polyModel(path,name)
-model2 = polyModel(path,name2)
 button = button(buttonpath,"button")
 
 """
@@ -58,36 +50,46 @@ print "position: "+str(model1.getPositionOffset())
 print "rotation: "+str(model1.getRotationOffset())
 print "scale: "+str(model1.getScale())
 """
+
 startX = 10.0
 startY = 0.0
 startZ = 10.0
 
-model1.setPositionOffset(startX, startY, startZ)
-model2.setPositionOffset(-startX, startY, startZ)
-model1.setScale(.1,.1,.1)
-model2.setScale(.1,.1,.1)
+#THIS LINE SHOULD NOT BE NECESSARY
+SceneManager.loadPolygonModel("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Full.osgb","skeleton1")
 
-a = model1.getPositionOffset()
-b = model2.getPositionOffset()
-while ( util.euclid(a,b) > .8):
+if (SceneManager.doesModelExist("skeleton1") == True):
+	skeleton = SceneManager.getModel("skeleton1")
+	SceneManager.addNodeToScene("skeleton1","mainView")
+elif (SceneManager.doesModelExist("skeleton1") == True):
+	skeleton = SceneManager.getModel("skeleton2")
+	SceneManager.addNodeToScene("skeleton2","mainView")
+
+hand = polyModel(handpath,"hand")
+hand.getModel().attachRigidBodyById(0)
+
+
+a = hand.getPositionOffset()
+b = skeleton.getPositionOffset()
+while ( util.euclid(a,b) > -1):
 	time.sleep(.050)
-	startX -= 0.050
-	startZ -= 0.050
-	model1.setPositionOffset(startX, startY, startZ)
-	model2.setPositionOffset(-startX, startY, -startZ)
-	model1.setRotationOffset(random.uniform(0,360),random.uniform(0,360),random.uniform(0,360),1)
-	model2.setRotationOffset(random.uniform(0,360),random.uniform(0,360),random.uniform(0,360),1)
-	a = model1.getPositionOffset()
-	b = model2.getPositionOffset()
+	#startX -= 0.050
+	#startZ -= 0.050
+	#model1.setPositionOffset(startX, startY, startZ)
+	#model2.setPositionOffset(-startX, startY, -startZ)
+	#model1.setRotationOffset(random.uniform(0,360),random.uniform(0,360),random.uniform(0,360),1)
+	#model2.setRotationOffset(random.uniform(0,360),random.uniform(0,360),random.uniform(0,360),1)
+	a = hand.getPositionOffset()
+	b = skeleton.getPositionOffset()
 
-model3 = polyModel(path,name3)
+model3 = polyModel(markerpath,"Marker")
 model3.setScale(.1,.1,.1)
 model3.setPositionOffset(0.0, 0.0,.5)
-model3.attachRigidBodyById(0)
+model3.attachRigidBodyById(1)
 time.sleep(10)
 
-model1.deleteModel()
-model2.deleteModel()
+skeleton.deleteModel()
+hand.getModel().deleteModel()
 model3.deleteModel()
 
 '''
