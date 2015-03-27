@@ -1,18 +1,15 @@
 from PyQt4 import QtCore, QtGui
 from calibrationWizard import CalibrationWizard
 
-
 class TabDialog(QtGui.QDialog):
-	def __init__(self, fileName, parent=None):
+	def __init__(self, parent=None):
 		super(TabDialog, self).__init__(parent)
-
-		fileInfo = QtCore.QFileInfo(fileName)
 
 		# Create our tabs
 		tabWidget = QtGui.QTabWidget()
-		tabWidget.addTab(CalibrationTab(fileInfo), "Calibration")
-		tabWidget.addTab(SetupTab(fileInfo), "Set Up Test")
-		tabWidget.addTab(ResultsTab(fileInfo), "Results")
+		tabWidget.addTab(CalibrationTab(), "Calibration")
+		tabWidget.addTab(SetupTab(), "Set Up Test")
+		tabWidget.addTab(ResultsTab(), "Results")
 
 		# Ok and exit buttons
 		buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
@@ -27,12 +24,12 @@ class TabDialog(QtGui.QDialog):
 
 		self.setWindowTitle("302 Project")
 
-
+# This tab deals with OptiTrack setup and calibration.
 class CalibrationTab(QtGui.QWidget):
-	def __init__(self, fileInfo, parent=None):
+	def __init__(self, parent=None):
 		super(CalibrationTab, self).__init__(parent)
 
-
+		# The tabs contains a button to open the wizard.
 		self.text = QtGui.QLabel("The calibration wizard can be used to guide you through OptiTrack setup.")
 		self.button = QtGui.QPushButton("Open Wizard")
 		self.button.resize(self.button.sizeHint())
@@ -50,9 +47,9 @@ class CalibrationTab(QtGui.QWidget):
 		wizard = CalibrationWizard()
 		wizard.exec_()
 
-
+# This tab deals with selecting a test to run.
 class SetupTab(QtGui.QWidget):
-	def __init__(self, fileInfo, parent=None):
+	def __init__(self, parent=None):
 		super(SetupTab, self).__init__(parent)
 
 		# Instructions text box
@@ -76,7 +73,7 @@ class SetupTab(QtGui.QWidget):
 		#self.img.setPixmap(pixmap)
 
 		# Set the default test to be displayed on launch in text description box
-		self.descriptionText = QtGui.QLabel("Tests vertebre for sections C1 through C7.", self)
+		self.descriptionText = QtGui.QLabel("Tests vertebrae for sections C1 through C7.", self)
 
 		# Add sub-widgets to the main layout
 		mainVbox = QtGui.QVBoxLayout()
@@ -93,20 +90,20 @@ class SetupTab(QtGui.QWidget):
 
 	# When the user selects an item from the list, display its information
 	def onActivated(self, text):
-		if (text == "Test #1"):
-			text = "Tests vertebre for sections C1 through C7."
+		if text == "Test #1":
+			text = "Tests vertebrae for sections C1 through C7."
 			# pixmap = QtGui.QPixmap('pidgey.png')
-		elif (text == "Test #2"):
-			text = "Tests vertebre for sections T1 through T12."
+		elif text == "Test #2":
+			text = "Tests vertebrae for sections T1 through T12."
 			# pixmap = QtGui.QPixmap('Pidgeotto.png')
-		elif (text == "Test #3"):
-			text = "Tests vertebre for sections L1 through L5."
+		elif text == "Test #3":
+			text = "Tests vertebrae for sections L1 through L5."
 			# pixmap = QtGui.QPixmap('pidgeot.png')
-		elif (text == "Test #4"):
-			text = "Tests all vertebre."
+		elif text == "Test #4":
+			text = "Tests all vertebrae."
 			# pixmap = QtGui.QPixmap('pigeot_icon.png')
-		elif (text == "Test #5"):
-			text = "Tests vertebre for sections C1 through C7 and L1 through L5."
+		elif text == "Test #5":
+			text = "Tests vertebrae for sections C1 through C7 and L1 through L5."
 			# pixmap = QtGui.QPixmap('big_bird.png')
 		else:
 			text = "Custom Test"
@@ -119,21 +116,21 @@ class SetupTab(QtGui.QWidget):
 
 
 class ResultsTab(QtGui.QWidget):
-	def __init__(self, fileInfo, parent=None):
+	def __init__(self, parent=None):
 		super(ResultsTab, self).__init__(parent)
 
-		fileNameLabel = QtGui.QLabel("How to Calibrate OptiTrack")
-		pathLabel = QtGui.QLabel("Step1: sfdsfdsfdsf")
-		sizeLabel = QtGui.QLabel("Step2: fjdsifjdsfopdsafd")
-		lastReadLabel = QtGui.QLabel("Step3: sjfiosjfiodfjid")
-		lastModLabel = QtGui.QLabel("Step4: sfjidspjfdps")
+		resultsLabel = QtGui.QLabel("Results")
+		result1 = QtGui.QLabel("Result 1")
+		result2 = QtGui.QLabel("Result 2")
+		result3 = QtGui.QLabel("Result 3")
+		result4 = QtGui.QLabel("Result 4")
 
 		mainLayout = QtGui.QVBoxLayout()
-		mainLayout.addWidget(fileNameLabel)
-		mainLayout.addWidget(pathLabel)
-		mainLayout.addWidget(sizeLabel)
-		mainLayout.addWidget(lastReadLabel)
-		mainLayout.addWidget(lastModLabel)
+		mainLayout.addWidget(resultsLabel)
+		mainLayout.addWidget(result1)
+		mainLayout.addWidget(result2)
+		mainLayout.addWidget(result3)
+		mainLayout.addWidget(result4)
 		mainLayout.addStretch(1)
 		self.setLayout(mainLayout)
 
@@ -144,10 +141,5 @@ if __name__ == '__main__':
 
 	app = QtGui.QApplication(sys.argv)
 
-	if len(sys.argv) >= 2:
-		fileName = sys.argv[1]
-	else:
-		fileName = "."
-
-	tabdialog = TabDialog(fileName)
+	tabdialog = TabDialog()
 	sys.exit(tabdialog.exec_())
