@@ -11,11 +11,16 @@ import time
 import math
 import random
 
+from PyQt4 import QtGui
 from util import util
 from polyModel import polyModel
 from polyModel import polyModelDict
 from button import button
-#import mainmenu
+import fileWizard
+
+print "BEFORE MAIN"
+fileWizard.main()
+print "AFTER MAIN"
 
 print "---------------------------------------"
 #model path and name
@@ -57,13 +62,15 @@ startZ = 10.0
 
 #THIS LINE SHOULD NOT BE NECESSARY
 SceneManager.loadPolygonModel("C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Full.osgb","skeleton1")
+while(SceneManager.doesModelExist("skeleton2") != True):
 
-if (SceneManager.doesModelExist("skeleton1") == True):
-	skeleton = SceneManager.getModel("skeleton1")
-	SceneManager.addNodeToScene("skeleton1","mainView")
-elif (SceneManager.doesModelExist("skeleton1") == True):
-	skeleton = SceneManager.getModel("skeleton2")
-	SceneManager.addNodeToScene("skeleton2","mainView")
+	if (SceneManager.doesModelExist("skeleton1") == True):
+		skeleton = SceneManager.getModel("skeleton1")
+		SceneManager.addNodeToScene("skeleton1","mainView")
+	elif (SceneManager.doesModelExist("skeleton1") == True):
+		skeleton = SceneManager.getModel("skeleton2")
+		SceneManager.addNodeToScene("skeleton2","mainView")
+	print "BAD LOOP"
 
 hand = polyModel(handpath,"hand")
 hand.getModel().attachRigidBodyById(0)
@@ -73,6 +80,7 @@ a = hand.getPositionOffset()
 b = skeleton.getPositionOffset()
 while ( util.euclid(a,b) > -1):
 	time.sleep(.050)
+	print "GOOD LOOP"
 	#startX -= 0.050
 	#startZ -= 0.050
 	#model1.setPositionOffset(startX, startY, startZ)
@@ -91,12 +99,6 @@ time.sleep(10)
 skeleton.deleteModel()
 hand.getModel().deleteModel()
 model3.deleteModel()
-
-'''
-app = QtGui.QApplication(sys.argv)
-window = MainWindow()
-sys.exit(app.exec_())
-'''
 
 #write to file
 #something.encode("utf-8")

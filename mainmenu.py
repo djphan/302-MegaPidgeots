@@ -1,5 +1,6 @@
 import sys
 from PyQt4 import QtGui, QtCore
+sys.path.insert(0, "C:\\Users\\Aedan\\Desktop\\Homework Folder\\CMPUT 302\\302-MegaPidgeots")
 from chooseTest import RunTest
 from results import ResultsWindow
 from maintab import MainTabWidget

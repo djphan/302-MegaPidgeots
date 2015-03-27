@@ -5,7 +5,7 @@ they want to open in their file system with a GUI.
 import sys
 import os
 from PyQt4 import QtGui
-# import SceneManager
+import SceneManager
 
 class FileWizard(QtGui.QWidget):
 	def __init__(self):
