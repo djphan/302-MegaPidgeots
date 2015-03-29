@@ -5,7 +5,7 @@ they want to open in their file system with a GUI.
 import sys
 import os
 from PyQt4 import QtGui
-# import SceneManager
+import SceneManager
 
 class FileWizard(QtGui.QWidget):
 	def __init__(self):
@@ -31,9 +31,9 @@ class FileWizard(QtGui.QWidget):
 
 		# based on the file, pick the name for the model
 		if (file == 'Skeleton_FULL.OSGB'):
-			model = 'skeleton1'
+			model = "skeleton1"
 		elif (file == 'Skeleton_Back.OSGB'):
-			model = 'skeleton2'
+			model = "skeleton2"
 		else:
 			title = "Invalid File"
 			error = "Please choose Skeleton_FULL or Skeleton_Back."
