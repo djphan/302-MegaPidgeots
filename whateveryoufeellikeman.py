@@ -1,7 +1,7 @@
 from PyQt4 import QtCore, QtGui
 from calibrationWizard import CalibrationWizard
 import os
-#import SceneManager
+import SceneManager
 
 # Some global variables: Our Test Names
 TEST1 = "Skeleton Full"
@@ -123,20 +123,25 @@ class SetupTab(QtGui.QWidget):
 		else:
 			model = MODEL2
 
-		"""
+
 		# Before we try to add a model, we should make sure one doesn't already exist
 		if SceneManager.doesModelExist(MODEL1) or SceneManager.doesModelExist(MODEL2):
 			title = "A skeleton model is already loaded!"
 			error = "Please wait for current test to finish before attempting to start another."
 			QtGui.QMessageBox.critical(None, title, error, QtGui.QMessageBox.Close)
 			return
-		"""
 
+		"""
+		>>>>> YOU NEED TO CHANGE PATH TO MODELS BASED ON YOUR COMPUTER <<<<
+		"""
 		# We can load the model in projectDr now
-		# TODO: GET PATH TO SKELETON FILES
+		if model == MODEL1:
+			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Full.osg"
+		else:
+			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Back.osg"
 
 		# Send the model to scene manager
-		#SceneManager.loadPolygonModel(path, model)
+		SceneManager.loadPolygonModel(path, model)
 		return
 
 
