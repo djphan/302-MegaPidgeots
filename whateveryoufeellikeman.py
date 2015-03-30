@@ -136,9 +136,9 @@ class SetupTab(QtGui.QWidget):
 		"""
 		# We can load the model in projectDr now
 		if model == MODEL1:
-			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Full.osg"
+			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Full.OSGB"
 		else:
-			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Back.osg"
+			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Back.OSGB"
 
 		# Send the model to scene manager
 		SceneManager.loadPolygonModel(path, model)
@@ -189,7 +189,7 @@ class ResultsTab(QtGui.QWidget):
 		grid = QtGui.QGridLayout()
 		grid.setSpacing(10)
 		grid.addWidget(fileLabel, 1, 0)
-		grid.addWidget(file, 1, 1)
+		grid.addWidget(self.file, 1, 1)
 		grid.addWidget(testLabel, 2, 0)
 		grid.addWidget(self.test, 2, 1)
 		grid.addWidget(dateLabel, 3, 0)
@@ -200,7 +200,7 @@ class ResultsTab(QtGui.QWidget):
 		grid.addWidget(self.accuracy, 5, 1)
 		grid.addWidget(self.fileButton, 6, 0, 1, 1)
 		grid.addWidget(fill, 7, 0, 10, 5)
-		self.setLayout(self.grid)
+		self.setLayout(grid)
 
 	# Uses file dialog to get path to results
 	def getResults(self):
