@@ -123,7 +123,6 @@ class SetupTab(QtGui.QWidget):
 		else:
 			model = MODEL2
 
-
 		# Before we try to add a model, we should make sure one doesn't already exist
 		if SceneManager.doesModelExist(MODEL1) or SceneManager.doesModelExist(MODEL2):
 			title = "A skeleton model is already loaded!"
@@ -139,6 +138,11 @@ class SetupTab(QtGui.QWidget):
 			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Full.OSGB"
 		else:
 			path = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\Skeleton_Back.OSGB"
+
+		# Notify the user that model was successfully loaded.
+		title = "Model Loaded"
+		error = "Model was successfully loaded into ProjectDr."
+		QtGui.QMessageBox.information(None, title, error, QtGui.QMessageBox.Ok)
 
 		# Send the model to scene manager
 		SceneManager.loadPolygonModel(path, model)
