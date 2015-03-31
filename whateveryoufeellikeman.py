@@ -179,7 +179,14 @@ class SetupTab(QtGui.QWidget):
 		SceneManager.addNodeToScene(model,"projectorView")
 		SceneManager.addNodeToScene("Button","projectorView")
 
-		ClientHandler.getRigidBody(9235235235)
+		#ATTACH RIGID BODY
+		lizt = ClientHandler.getRigidBodyList()
+		rb = ClientHandler.getRigidBody(lizt[0])
+		handModel.attachRigidBodyById(rb.getID())
+		#f = open("FILEFILE.txt")
+		#f.write("FUCK EVERYTHING")
+		#f.write(rb.getID())
+		#f.close()
 		return
 
 
