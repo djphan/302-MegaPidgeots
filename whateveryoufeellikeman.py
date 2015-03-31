@@ -184,10 +184,11 @@ class SetupTab(QtGui.QWidget):
 		lizt = ClientHandler.getRigidBodyList()
 		rb = ClientHandler.getRigidBody(lizt[0])
 		handModel.attachRigidBodyById(rb.getID())
-		#f = open("FILEFILE.txt")
-		#f.write("FUCK EVERYTHING")
-		#f.write(rb.getID())
-		#f.close()
+	
+		#MEASURE DISTANCE VIA BUTTON IN SOME KIND OF LOOP 'HERE'
+
+		#WRITE RESULTS TO FILE
+		
 		return
 
 
