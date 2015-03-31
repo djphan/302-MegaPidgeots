@@ -161,13 +161,14 @@ class SetupTab(QtGui.QWidget):
 		#Scale Skeleton
 		SceneManager.getModel(model).setScale(.05,.05,.05)
 		SceneManager.getModel(model).setRotationOffset(0,0,-1,1)
-		SceneManager.getModel(model).setPositionOffset(0,0,-1.4)
+		SceneManager.getModel(model).setPositionOffset(0,.15,-1.7)
 
 		#Scale Invisible Hand Model
-		SceneManager.getModel(handModel).setScale(.02,.02,.02)
+		SceneManager.getModel(handModel).setScale(.01,.01,.01)
+		SceneManager.getModel("Button").setPositionOffset(0,.15,0)
 
 		#Scale button for user to push
-		SceneManager.getModel("Button").setPositionOffset(-.4,0,-.4)
+		SceneManager.getModel("Button").setPositionOffset(-.4,.15,-.4)
 		SceneManager.getModel("Button").setScale(.02,.02,.02)
 
 		#Add all three models to scene
