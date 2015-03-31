@@ -146,6 +146,9 @@ class SetupTab(QtGui.QWidget):
 
 		# Send the model to scene manager
 		SceneManager.loadPolygonModel(path, model)
+		SceneManager.getModel(model).setScale(.05,.05,.05)
+		SceneManager.getModel(model).setRotationOffset(0,0,-1,1)
+		SceneManager.getModel(model).setPositionOffset(0,0,-1.4)
 		return
 
 
