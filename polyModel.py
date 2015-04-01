@@ -20,6 +20,7 @@ class polyModel():
 		SceneManager.deleteModel(self.getName())
 		return
 
+
 	def getName(self):
 		return self.name
 
@@ -50,7 +51,7 @@ class polyModel():
 		if getRigidBodyId() == None:
 			return getPositionOffset()
 		else:
-			return tuple(map(operator.add, self.getPositionOffset(), self.getRigidBody().getPosition()))
+			return tuple(map(operator.add, self.getPositionOffset(), self.getRigidBody(self.rigidBodyId).getPosition()))
 		
 	def setPositionOffset(self,x,y,z):
 		try:
@@ -67,7 +68,7 @@ class polyModel():
 		if getRigidBodyId() == None:
 			return getRotationOffset()
 		else:
-			return tuple(map(operator.add, self.getRotationOffset(), self.getRigidBody().getRotation()))
+			return tuple(map(operator.add, self.getRotationOffset(), self.getRigidBody(self.rigidBodyId).getRotation()))
 	
 	def setRotationOffset(self,x,y,z,w):
 		try:
