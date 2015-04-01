@@ -10,7 +10,7 @@ class ResultsWindow(QtGui.QWidget):
     def __init__(self):
         super(ResultsWindow, self).__init__()
         self.initUI()
-        
+
     # Initilize the UI of the window
     def initUI(self):
 
@@ -35,7 +35,7 @@ class ResultsWindow(QtGui.QWidget):
         # Test image
         pic = QtGui.QLabel()
         pic.setPixmap(QtGui.QPixmap('pidgey.png'))
-            
+
         # Ok and Exit buttons
         okButton = QtGui.QPushButton("OK")
         okButton.clicked.connect(self.buttonClicked)
@@ -70,7 +70,7 @@ class ResultsWindow(QtGui.QWidget):
         mainVbox.addWidget(menu_bar)
 
         self.setLayout(page)     
-
+        
         # Create the window     
         self.resize(800, 600)         # Width: 800 pixels, height 600 pixels
         self.centerWindow()           # Center the box on the users screen              
@@ -78,7 +78,7 @@ class ResultsWindow(QtGui.QWidget):
         # Show our pigeot pokemon icon
         self.setWindowIcon(QtGui.QIcon('pigeot_icon.png'))      
         self.show()
-        
+
 
      # Do something when the "Ok" button is clicked
     def buttonClicked(self):
