@@ -9,6 +9,9 @@ TEST2 = "Skeleton Partial"
 MODEL1 = "skeleton1"
 MODEL2 = "skeleton2"
 
+handModel = "HAND"
+handPath = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\HAND.OSGB"
+
 class TabDialog(QtGui.QDialog):
 	def __init__(self, parent=None):
 		super(TabDialog, self).__init__(parent)
@@ -145,10 +148,47 @@ class SetupTab(QtGui.QWidget):
 		QtGui.QMessageBox.information(None, title, error, QtGui.QMessageBox.Ok)
 
 		# Send the model to scene manager
+
+		# Load Skeleton
 		SceneManager.loadPolygonModel(path, model)
+
+		# Load Invisible Rigid Body Model
+		SceneManager.loadPolygonModel(handPath, handModel)
+
+		# Load button for saying you are done test
+		SceneManager.loadPolygonModel(handPath, "Button")
+
+		#Scale Skeleton
 		SceneManager.getModel(model).setScale(.05,.05,.05)
 		SceneManager.getModel(model).setRotationOffset(0,0,-1,1)
-		SceneManager.getModel(model).setPositionOffset(0,0,-1.4)
+		SceneManager.getModel(model).setPositionOffset(0,.15,-1.7)
+
+		#Scale Invisible Hand Model
+		SceneManager.getModel(handModel).setScale(.01,.01,.01)
+		SceneManager.getModel("Button").setPositionOffset(0,.15,0)
+
+		#Scale button for user to push
+		SceneManager.getModel("Button").setPositionOffset(-.4,.15,-.4)
+		SceneManager.getModel("Button").setScale(.02,.02,.02)
+
+		#Add all three models to scene
+		SceneManager.addNodeToScene(model,"mainView")
+		SceneManager.addNodeToScene("Button","mainView")
+		SceneManager.addNodeToScene(handModel,"mainView")
+
+		#Add skeleton and button to projector
+		SceneManager.addNodeToScene(model,"projectorView")
+		SceneManager.addNodeToScene("Button","projectorView")
+
+		#ATTACH RIGID BODY
+		lizt = ClientHandler.getRigidBodyList()
+		rb = ClientHandler.getRigidBody(lizt[0])
+		handModel.attachRigidBodyById(rb.getID())
+	
+		#MEASURE DISTANCE VIA BUTTON IN SOME KIND OF LOOP 'HERE'
+
+		#WRITE RESULTS TO FILE
+		
 		return
 
 
