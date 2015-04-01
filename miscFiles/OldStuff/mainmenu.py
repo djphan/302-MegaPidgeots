@@ -1,4 +1,5 @@
 import sys
+#sys.path.insert(0, "C:\\Users\\STAIR\\Desktop\\ProjectDR\\302-MegaPidgeots-master")
 from PyQt4 import QtGui, QtCore
 from chooseTest import RunTest
 from results import ResultsWindow
