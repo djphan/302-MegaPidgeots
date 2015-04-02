@@ -185,8 +185,9 @@ class SetupTab(QtGui.QWidget):
 		SceneManager.addNodeToScene("Button","projectorView")
 
 		#ATTACH RIGID BODY
+		SceneManager.getModel(handModel).attachRigidBodyById(1)
 		lizt = ClientHandler.getRigidBodyList()
-		rb = ClientHandler.getRigidBody(lizt[0])
+		rb = ClientHandler.getRigidBody(list[0])
 		handModel.attachRigidBodyById(rb.getID())
 	
 		#MEASURE DISTANCE VIA BUTTON IN SOME KIND OF LOOP 'HERE'
