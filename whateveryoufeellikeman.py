@@ -2,6 +2,7 @@ from PyQt4 import QtCore, QtGui
 from calibrationWizard import CalibrationWizard
 import os
 import SceneManager
+from multiprocessing import Process
 
 # Some global variables: Our Test Names
 TEST1 = "Skeleton Full"
@@ -10,7 +11,9 @@ MODEL1 = "skeleton1"
 MODEL2 = "skeleton2"
 
 handModel = "HAND"
-handPath = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\HAND.OSGB"
+buttonModel = "Button"
+handPath = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\BLUE.OSGB"
+buttonPath = "C:\Users\Aedan\Desktop\Homework Folder\CMPUT 302\osg-data\HAND.OSGB"
 
 class TabDialog(QtGui.QDialog):
 	def __init__(self, parent=None):
@@ -156,7 +159,7 @@ class SetupTab(QtGui.QWidget):
 		SceneManager.loadPolygonModel(handPath, handModel)
 
 		# Load button for saying you are done test
-		SceneManager.loadPolygonModel(handPath, "Button")
+		SceneManager.loadPolygonModel(buttonPath, buttonModel)
 
 		#Scale Skeleton
 		SceneManager.getModel(model).setScale(.05,.05,.05)
@@ -164,12 +167,13 @@ class SetupTab(QtGui.QWidget):
 		SceneManager.getModel(model).setPositionOffset(0,.15,-1.7)
 
 		#Scale Invisible Hand Model
-		SceneManager.getModel(handModel).setScale(.01,.01,.01)
-		SceneManager.getModel("Button").setPositionOffset(0,.15,0)
+		SceneManager.getModel(handModel).setScale(.02,.02,.02)
+		SceneManager.getModel(handModel).setPositionOffset(0,1,0)
+		SceneManager.getModel(handModel).setRotationOffset(1,0,0,1)
 
 		#Scale button for user to push
-		SceneManager.getModel("Button").setPositionOffset(-.4,.15,-.4)
-		SceneManager.getModel("Button").setScale(.02,.02,.02)
+		SceneManager.getModel(buttonModel).setPositionOffset(-.4,.15,-.4)
+		SceneManager.getModel(buttonModel).setScale(.02,.02,.02)
 
 		#Add all three models to scene
 		SceneManager.addNodeToScene(model,"mainView")
@@ -181,8 +185,9 @@ class SetupTab(QtGui.QWidget):
 		SceneManager.addNodeToScene("Button","projectorView")
 
 		#ATTACH RIGID BODY
+		SceneManager.getModel(handModel).attachRigidBodyById(1)
 		lizt = ClientHandler.getRigidBodyList()
-		rb = ClientHandler.getRigidBody(lizt[0])
+		rb = ClientHandler.getRigidBody(list[0])
 		handModel.attachRigidBodyById(rb.getID())
 	
 		#MEASURE DISTANCE VIA BUTTON IN SOME KIND OF LOOP 'HERE'
@@ -281,10 +286,11 @@ class ResultsTab(QtGui.QWidget):
 
 
 if __name__ == '__main__':
-
 	import sys
 
 	app = QtGui.QApplication(sys.argv)
 
 	tabdialog = TabDialog()
 	sys.exit(tabdialog.exec_())
+
+
