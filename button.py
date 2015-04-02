@@ -1,6 +1,5 @@
 from polyModel import polyModel
 
-
 class button():
 	def __init__(self,path,name):
 		self.buttonModel = polyModel(path,name)
@@ -10,6 +9,7 @@ class button():
 		self.pressedDist = 0.05
 		self.over = False
 		self.pressed = False
+
 
 	def attachTrackModel(self,polyModel):
 		self.trackModel = polyModel
@@ -49,6 +49,9 @@ class button():
 			return 1
 		return 0
 
+	def getPositionOffset(self):
+		return self.buttonModel.getPositionOffset()
+
 	def setRotationOffset(self,x,y,z,w):
 		try:
 			self.buttonModel.setRotationOffset(x,y,z,w)
@@ -56,9 +59,15 @@ class button():
 			return 1
 		return 0
 
+	def getRotationOffset(self):
+		return self.buttonModel.getRotationOffset(self)
+
 	def setScale(self,x,y,z):
 		try:
 			self.buttonModel.setScale(x,y,z)
 		except:
 			return 1
 		return 0
+
+	def getScale(self):
+		return self.buttonModel.getScale()
