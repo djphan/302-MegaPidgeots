@@ -8,7 +8,7 @@ class polyModel():
 		self.name = name
 		self.path = path
 		self.rigidBodyId = None
-		if not(SceneManager.doesModelExist(name)):
+		if (SceneManager.doesModelExist(name) != True):
 			SceneManager.loadPolygonModel(path,name)
 			self.model = SceneManager.getModel(name)
 			addToScene("mainView")

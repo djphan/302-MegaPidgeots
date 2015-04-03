@@ -4,8 +4,8 @@ import os
 import SceneManager
 import ClientHandler
 #from multiprocessing import Process
-import button
-import polyModel
+from button import button
+from polyModel import polyModel
 import time
 
 # Some global variables: Our Test Names
@@ -13,8 +13,8 @@ TEST1 = "Skeleton Full"
 TEST2 = "Skeleton Partial"
 MODEL1 = "skeleton1"
 MODEL2 = "skeleton2"
-PATH1 = "C:\Users\Aedan\Documents\ProjectDR\Skeleton_Full.OSGB"
-PATH2 = "C:\Users\Aedan\Documents\ProjectDR\Skeleton_Back.OSGB"
+PATH1 = "Skeleton_Full.OSGB"
+PATH2 = "Skeleton_Back.OSGB"
 
 from PyQt4 import QtCore, QtGui
 
@@ -22,10 +22,11 @@ handNavModel = "NAVIGATION HAND"
 handButtModel = "BUTTON HAND"
 buttonModel = "Button"
 greenModel = "Result Model"
-handPath = "C:\Users\Aedan\Documents\ProjectDR\Blue.OSGB"
-navPath = "C:\Users\Aedan\Documents\ProjectDR\Orange.OSGB"
-buttonPath = "C:\Users\Aedan\Documents\ProjectDR\HAND.OSGB"
-greenPath = "C:\Users\Aedan\Documents\ProjectDR\GREEN.OSGB"
+
+handPath = "Blue.OSGB"
+navPath = "Orange.OSGB"
+buttonPath = "HAND.OSGB"
+greenPath = "GREEN.OSGB"
 
 #def print(*arg, **kwargs):
     #for args in arg:
@@ -283,6 +284,7 @@ class WorkThread(QtCore.QThread):
         self.wait()
 
     def run(self):
+
         # We can load models from the thread! Yay!
         SceneManager.loadPolygonModel(PATH1, "THREAD")
 
@@ -292,14 +294,10 @@ class WorkThread(QtCore.QThread):
         #f1.close()
 
         # Get button position once since its position is static
-        
-        #button = SceneManager.getModel(buttonModel)
         button = button(buttonPath,buttonModel)
         buttonPosition = button.getPositionOffset()
 
         # Get the initial hand position
-
-        #hand = SceneManager.getModel(handButtModel)
         hand = polyModel(handPath,handButtModel)
         handPosition = hand.getPositionOffset()
 
@@ -312,15 +310,20 @@ class WorkThread(QtCore.QThread):
         # Wait for a collision with the button
         print("Inital Button Position: "+str(buttonPosition))
         print("Inital Hand Position: "+str(handPosition))
-        
+
         button.attachTrackModel(hand)
         
 
         # Flag to Double Tap
         buttonflag = 0
+
         while (1):
             result = navHand.getPositionOffset()
 
+            HP = hand.getPositionOffset
+            HP[0] -= 0.02
+            HP[2] -= 0.02
+            hand.setPositionOffset(HP)
             # User Can Press the Green Marker to Undo
             if marker:
                 if (marker.isPressed()):
