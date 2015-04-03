@@ -6,6 +6,7 @@ import ClientHandler
 #from multiprocessing import Process
 import button
 import polyModel
+import time
 
 # Some global variables: Our Test Names
 TEST1 = "Skeleton Full"
@@ -306,25 +307,53 @@ class WorkThread(QtCore.QThread):
 
         navHand = polyModel(navPath, handNavModel)
         navPosition = navHand.getPositionOffset()
+        marker = None
 
         # Wait for a collision with the button
         print("Inital Button Position: "+str(buttonPosition))
         print("Inital Hand Position: "+str(handPosition))
         
         button.attachTrackModel(hand)
+        
 
-        # Wait for a collision
+        # Flag to Double Tap
+        buttonflag = 0
         while (1):
             result = navHand.getPositionOffset()
 
+            # User Can Press the Green Marker to Undo
+            if marker:
+                if (marker.isPressed()):
+                    # ?? Does this work?
+                    marker.buttonModel.deleteModel()
+                    marker = None
+                    buttonflag = 0
+
+            # User Presses Button to Mark Answer
+            # User Double Taps To Confirm Selection
             if (button.isPressed()):
-                break
+                # Double Tap/Hold
+                if buttonflag == 1:
+                    break
+
+                #Draw Green Sphere at Users Answer Location
+                marker = button(greenPath, greenModel)
+                # Track both hands?
+                marker.attachTrackModel(hand)
+                marker.setPositionOffset(result[0], result[1], result[2])
+
+                buttonflag += 1
+                # Sleep to delay next loop iteration
+                time.sleep(2)
+
+         
+        #Print results to file.
+        #answers in a seperate part of the GUI
 
         print(">>>> A collision occured <<<<")
 
-        #Draw Green Sphere at Users Answer Location
-        #Print results to file.
-        #answers in a seperate part of the GUI
+        
+ 
 
         # Terminate the thread when we are done!! 
         self.terminate()
