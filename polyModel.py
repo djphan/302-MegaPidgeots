@@ -21,14 +21,14 @@ class polyModel():
 		return
 
 		#"mainView", "projectorView"
-	def addToScene(scene):
+	def addToScene(self,scene):
 		try:
 			SceneManager.addNodeToScene(self.name,scene)
 		except:
 			"something blew up"
 		return
 
-	def	removeFromScene(scene):
+	def	removeFromScene(self,scene):
 		try:
 			SceneManager.removeNodeFromScene(self.name,scene)
 		except:
