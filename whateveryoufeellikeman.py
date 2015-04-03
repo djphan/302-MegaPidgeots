@@ -20,9 +20,11 @@ from PyQt4 import QtCore, QtGui
 handNavModel = "NAVIGATION HAND"
 handButtModel = "BUTTON HAND"
 buttonModel = "Button"
+greenModel = "Result Model"
 handPath = "C:\Users\Aedan\Documents\ProjectDR\Blue.OSGB"
 navPath = "C:\Users\Aedan\Documents\ProjectDR\Orange.OSGB"
 buttonPath = "C:\Users\Aedan\Documents\ProjectDR\HAND.OSGB"
+greenPath = "C:\Users\Aedan\Documents\ProjectDR\GREEN.OSGB"
 
 #def print(*arg, **kwargs):
     #for args in arg:
@@ -300,15 +302,29 @@ class WorkThread(QtCore.QThread):
         hand = polyModel(handPath,handButtModel)
         handPosition = hand.getPositionOffset()
 
+        #Get the hand navigation model
+
+        navHand = polyModel(navPath, handNavModel)
+        navPosition = navHand.getPositionOffset()
+
         # Wait for a collision with the button
         print("Inital Button Position: "+str(buttonPosition))
         print("Inital Hand Position: "+str(handPosition))
         
+        button.attachTrackModel(hand)
+
         # Wait for a collision
-        while(util.euclid(buttonPosition,handPosition) > 0.5):
-            handPosition = getPositionOffset()
+        while (1):
+            result = navHand.getPositionOffset()
+
+            if (button.isPressed()):
+                break
 
         print(">>>> A collision occured <<<<")
+
+        #Draw Green Sphere at Users Answer Location
+        #Print results to file.
+        #answers in a seperate part of the GUI
 
         # Terminate the thread when we are done!! 
         self.terminate()
