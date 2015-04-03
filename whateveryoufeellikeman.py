@@ -3,30 +3,34 @@ from calibrationWizard import CalibrationWizard
 import os
 import SceneManager
 import ClientHandler
+#from multiprocessing import Process
 import button
+import polyModel
 
 # Some global variables: Our Test Names
 TEST1 = "Skeleton Full"
 TEST2 = "Skeleton Partial"
 MODEL1 = "skeleton1"
 MODEL2 = "skeleton2"
-PATH1 = "C:\Users\STAIR\Desktop\ProjectDR\Skeleton_Full.OSGB"
-PATH2 = "C:\Users\STAIR\Desktop\ProjectDR\Skeleton_Back.OSGB"
+PATH1 = "C:\Users\Aedan\Documents\ProjectDR\Skeleton_Full.OSGB"
+PATH2 = "C:\Users\Aedan\Documents\ProjectDR\Skeleton_Back.OSGB"
 
 from PyQt4 import QtCore, QtGui
 
 handNavModel = "NAVIGATION HAND"
 handButtModel = "BUTTON HAND"
 buttonModel = "Button"
-handPath = "C:\Users\STAIR\Desktop\ProjectDR\Blue.OSGB"
-buttonPath = "C:\Users\STAIR\Desktop\ProjectDR\HAND.OSGB"
+handPath = "C:\Users\Aedan\Documents\ProjectDR\Blue.OSGB"
+navPath = "C:\Users\Aedan\Documents\ProjectDR\Orange.OSGB"
+buttonPath = "C:\Users\Aedan\Documents\ProjectDR\HAND.OSGB"
 
-def print(*arg, **kwargs):
-    for args in arg:
-        f1 = open('printlog.txt', 'a')
-        f1.write(args)
-        f1.write("\n")
-        f1.close()
+#def print(*arg, **kwargs):
+    #for args in arg:
+        #f1 = open('printlog.txt', 'a')
+        #f1.write(args)
+        #f1.write("\n")
+        #f1.close()
+
 
 class TabDialog(QtGui.QDialog):
     def __init__(self, parent=None):
@@ -280,16 +284,20 @@ class WorkThread(QtCore.QThread):
         SceneManager.loadPolygonModel(PATH1, "THREAD")
 
         # Write to log file because science.
-        f1 = open('printlog.txt', 'a')
-        f1.write('In the thread\n')
-        f1.close()
+        #f1 = open('printlog.txt', 'a')
+        #f1.write('In the thread\n')
+        #f1.close()
 
         # Get button position once since its position is static
-        button = SceneManager.getModel(buttonModel)
+        
+        #button = SceneManager.getModel(buttonModel)
+        button = button(buttonPath,buttonModel)
         buttonPosition = button.getPositionOffset()
 
-        # Get the initial hand position 
-        hand = SceneManager.getModel(handButtModel)
+        # Get the initial hand position
+
+        #hand = SceneManager.getModel(handButtModel)
+        hand = polyModel(handPath,handButtModel)
         handPosition = hand.getPositionOffset()
 
         # Wait for a collision with the button
@@ -311,7 +319,7 @@ class WorkThread(QtCore.QThread):
 if __name__ == '__main__':
     import sys
     # Load button and hand models
-    SceneManager.loadPolygonModel(handPath, handNavModel)
+    SceneManager.loadPolygonModel(navPath, handNavModel)
     SceneManager.loadPolygonModel(handPath, handButtModel)
     SceneManager.loadPolygonModel(buttonPath, buttonModel)
 
