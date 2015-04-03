@@ -2,7 +2,8 @@ from __future__ import print_function
 from calibrationWizard import CalibrationWizard
 import os
 import SceneManager
-from multiprocessing import Process
+import ClientHandler
+import button
 
 # Some global variables: Our Test Names
 TEST1 = "Skeleton Full"
@@ -14,7 +15,8 @@ PATH2 = "C:\Users\STAIR\Desktop\ProjectDR\Skeleton_Back.OSGB"
 
 from PyQt4 import QtCore, QtGui
 
-handModel = "HAND"
+handNavModel = "NAVIGATION HAND"
+handButtModel = "BUTTON HAND"
 buttonModel = "Button"
 handPath = "C:\Users\STAIR\Desktop\ProjectDR\Blue.OSGB"
 buttonPath = "C:\Users\STAIR\Desktop\ProjectDR\HAND.OSGB"
@@ -25,19 +27,6 @@ def print(*arg, **kwargs):
         f1.write(args)
         f1.write("\n")
         f1.close()
-
-class AThread(QtCore.QThread):
-
-    def run(self):
-        count = 0
-        while count < 5:
-            time.sleep(1)
-            print("Increasing")
-            count += 1
-            f1 = open('printlog.txt', 'w+')
-            f1.write('hksadhfjkhasdflkhsadjfashkdlfjhalsd')
-            f1.close()
-
 
 class TabDialog(QtGui.QDialog):
     def __init__(self, parent=None):
@@ -60,9 +49,6 @@ class TabDialog(QtGui.QDialog):
 
         self.setWindowTitle("302 Project")
         self.resize(1000, 600)
-
-        # Thread pool for threading
-        self.threadPool = []
 
 # This tab deals with OptiTrack setup and calibration.
 class CalibrationTab(QtGui.QWidget):
@@ -179,53 +165,21 @@ class SetupTab(QtGui.QWidget):
 
         # Send the model to scene manager
 
-        f1 = open('printlog.txt', 'a')
-        f1.write('Loading Models\n')
-        f1.close()
+        print("LOADING NEW TEST")
 
         # Load Skeleton
         SceneManager.loadPolygonModel(path, model)
-
-        # Load Invisible Rigid Body Model
-        SceneManager.loadPolygonModel(handPath, handModel)
-
-        # Load button for saying you are done test
-        SceneManager.loadPolygonModel(buttonPath, buttonModel)
 
         #Scale Skeleton
         SceneManager.getModel(model).setScale(.05,.05,.05)
         SceneManager.getModel(model).setRotationOffset(0,0,-1,1)
         SceneManager.getModel(model).setPositionOffset(0,.15,-1.7)
-
-        #Scale Invisible Hand Model
-        SceneManager.getModel(handModel).setScale(.02,.02,.02)
-        SceneManager.getModel(handModel).setPositionOffset(0,1,0)
-        SceneManager.getModel(handModel).setRotationOffset(1,0,0,1)
-
-        #Scale button for user to push
-        SceneManager.getModel(buttonModel).setPositionOffset(-.4,.15,-.4)
-        SceneManager.getModel(buttonModel).setScale(.02,.02,.02)
-
-        #Add all three models to scene
         SceneManager.addNodeToScene(model,"mainView")
-        SceneManager.addNodeToScene("Button","mainView")
-        SceneManager.addNodeToScene(handModel,"mainView")
-
-        #Add skeleton and button to projector
         SceneManager.addNodeToScene(model,"projectorView")
-        SceneManager.addNodeToScene("Button","projectorView")
-
-        #ATTACH RIGID BODY (this doesnt work because projectDr is shit)
-        """
-        SceneManager.getModel(handModel).attachRigidBodyById(1)
-        lizt = ClientHandler.getRigidBodyList()
-        rb = ClientHandler.getRigidBody(list[0])
-        handModel.attachRigidBodyById(rb.getID())
-        """
 
         # Start thread for running test!
-        self.t = WorkThread()
-        self.t.start()
+        self.thread = WorkThread()
+        self.thread.start()
         return
 
 
@@ -330,9 +284,23 @@ class WorkThread(QtCore.QThread):
         f1.write('In the thread\n')
         f1.close()
 
-        # Wait for a collision with the button
-        while 1:
+        # Get button position once since its position is static
+        button = SceneManager.getModel(buttonModel)
+        buttonPosition = button.getPositionOffset()
 
+        # Get the initial hand position 
+        hand = SceneManager.getModel(handButtModel)
+        handPosition = hand.getPositionOffset()
+
+        # Wait for a collision with the button
+        print("Inital Button Position: "+str(buttonPosition))
+        print("Inital Hand Position: "+str(handPosition))
+        
+        # Wait for a collision
+        while(util.euclid(buttonPosition,handPosition) > 0.5):
+            handPosition = getPositionOffset()
+
+        print(">>>> A collision occured <<<<")
 
         # Terminate the thread when we are done!! 
         self.terminate()
@@ -342,8 +310,49 @@ class WorkThread(QtCore.QThread):
 
 if __name__ == '__main__':
     import sys
+    # Load button and hand models
+    SceneManager.loadPolygonModel(handPath, handNavModel)
+    SceneManager.loadPolygonModel(handPath, handButtModel)
+    SceneManager.loadPolygonModel(buttonPath, buttonModel)
 
+    #Scale Button Hand Models
+    SceneManager.getModel(handNavModel).setScale(.02,.02,.02)
+    SceneManager.getModel(handNavModel).setPositionOffset(0,1,0)
+    SceneManager.getModel(handNavModel).setRotationOffset(1,0,0,1)
+    SceneManager.getModel(handButtModel).setScale(.02,.02,.02)
+    SceneManager.getModel(handButtModel).setPositionOffset(0,1,0)
+    SceneManager.getModel(handButtModel).setRotationOffset(1,0,0,1)
+
+    # Scale button for user to push
+    SceneManager.getModel(buttonModel).setPositionOffset(-.4,.15,-.4)
+    SceneManager.getModel(buttonModel).setScale(.02,.02,.02)
+
+    # Add models to main view
+    SceneManager.addNodeToScene(buttonModel,"mainView")
+    SceneManager.addNodeToScene(handNavModel,"mainView")
+    SceneManager.addNodeToScene(handButtModel,"mainView")
+
+    # Add models to projector view
+    SceneManager.addNodeToScene(buttonModel,"projectorView")
+    SceneManager.addNodeToScene(handNavModel,"projectorView")
+    SceneManager.addNodeToScene(handButtModel,"projectorView")
+
+    # Attach the rigid bodies
+    rbList = ClientHandler.getRigidBodyList()
+    numRB = len(rbList)
+    print("\nNum of rigid bodies:"+str(numRB))
+    # We want to attach only if we have enough rigid bodies
+    if numRB > 2:
+        SceneManager.getModel(handNavModel).attachRigidBodyById(rbList[0])
+        SceneManager.getModel(handButtModel).attachRigidBodyById(rbList[1])
+        SceneManager.getModel(buttonModel).attachRigidBodyById(rbList[2])
+
+    # TODO: HOW DO I THROW ERRORS?????????????????????????????????????????
+    # We need to complain to the user if 3 rigid bodies aren't hooked up
+
+
+    # Start the GUI
     app = QtGui.QApplication(sys.argv)
-
     tabdialog = TabDialog()
     sys.exit(tabdialog.exec_())
+
