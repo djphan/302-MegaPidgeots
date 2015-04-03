@@ -11,7 +11,7 @@ class polyModel():
 		if not(SceneManager.doesModelExist(name)):
 			SceneManager.loadPolygonModel(path,name)
 			self.model = SceneManager.getModel(name)
-			SceneManager.addNodeToScene(name,"mainView")
+			addToScene("mainView")
 		else:
 			self.model = SceneManager.getModel(name)
 
@@ -20,6 +20,13 @@ class polyModel():
 		SceneManager.deleteModel(self.getName())
 		return
 
+		#"mainView", "projectorView"
+	def addToScene(scene):
+		try:
+			SceneManager.addNodeToScene(name,scene)
+		except:
+			"something blew up"
+		return
 
 	def getName(self):
 		return self.name
