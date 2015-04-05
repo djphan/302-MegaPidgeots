@@ -324,47 +324,26 @@ class WorkThread(QtCore.QThread):
             x = HP[0]
             y = HP[1]
             z = HP[2]
-
-            hand.setPositionOffset(x,y,z)
-
             x -= .1
             y -= .1
             z -= .1
-            time.sleep(1)
-            # User Can Press the Green Marker to Undo
-            """
-            if marker:
-                if (marker.isPressed()):
-                    # ?? Does this work?
-                    marker.buttonModel.deleteModel()
-                    marker = None
-                    buttonflag = 0
+            hand.setPositionOffset(x,y,z)
+            time.sleep(2)
 
-            # User Presses Button to Mark Answer
-            # User Double Taps To Confirm Selection
-            if (buttonZ.isPressed()):
-                # Double Tap/Hold
-                if buttonflag == 1:
-                    break
+            if ( not ( isPressed ( buttonPosition, HP, .01, .01, 3 ) ) ):
+                break
+                #marker = polyModel(greenPath, greenModel)
+                #marker.attachTrackModel(hand)
+                #marker.setPositionOffset(result[0], result[1], result[2])
 
-                #Draw Green Sphere at Users Answer Location
-                marker = button(greenPath, greenModel)
-                # Track both hands?
-                marker.attachTrackModel(hand)
-                marker.setPositionOffset(result[0], result[1], result[2])
-
-                buttonflag += 1
                 # Sleep to delay next loop iteration
-                time.sleep(2)
-            """
+                #time.sleep(2)
+                #break
          
         #Print results to file.
         #answers in a seperate part of the GUI
 
         print(">>>> A collision occured <<<<")
-
-        
- 
 
         # Terminate the thread when we are done!! 
         self.terminate()
