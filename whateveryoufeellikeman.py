@@ -286,16 +286,16 @@ class WorkThread(QtCore.QThread):
     def run(self):
 
         # We can load models from the thread! Yay!
-        SceneManager.loadPolygonModel(PATH1, "THREAD")
-
         # Write to log file because science.
         #f1 = open('printlog.txt', 'a')
         #f1.write('In the thread\n')
         #f1.close()
 
         # Get button position once since its position is static
-        button = button(buttonPath,buttonModel)
-        buttonPosition = button.getPositionOffset()
+        buttonZ= polyModel(buttonPath,buttonModel)
+
+
+        buttonPosition = buttonZ.getPositionOffset()
 
         # Get the initial hand position
         hand = polyModel(handPath,handButtModel)
@@ -311,20 +311,28 @@ class WorkThread(QtCore.QThread):
         print("Inital Button Position: "+str(buttonPosition))
         print("Inital Hand Position: "+str(handPosition))
 
-        button.attachTrackModel(hand)
+        #buttonZ.attachTrackModel(hand)
         
 
         # Flag to Double Tap
         buttonflag = 0
-
         while (1):
+
             result = navHand.getPositionOffset()
 
-            HP = hand.getPositionOffset
-            HP[0] -= 0.02
-            HP[2] -= 0.02
-            hand.setPositionOffset(HP)
+            HP = hand.getPositionOffset()
+            x = HP[0]
+            y = HP[1]
+            z = HP[2]
+
+            hand.setPositionOffset(x,y,z)
+
+            x -= .1
+            y -= .1
+            z -= .1
+            time.sleep(1)
             # User Can Press the Green Marker to Undo
+            """
             if marker:
                 if (marker.isPressed()):
                     # ?? Does this work?
@@ -334,7 +342,7 @@ class WorkThread(QtCore.QThread):
 
             # User Presses Button to Mark Answer
             # User Double Taps To Confirm Selection
-            if (button.isPressed()):
+            if (buttonZ.isPressed()):
                 # Double Tap/Hold
                 if buttonflag == 1:
                     break
@@ -348,7 +356,7 @@ class WorkThread(QtCore.QThread):
                 buttonflag += 1
                 # Sleep to delay next loop iteration
                 time.sleep(2)
-
+            """
          
         #Print results to file.
         #answers in a seperate part of the GUI
