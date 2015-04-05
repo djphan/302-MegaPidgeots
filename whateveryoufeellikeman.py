@@ -7,6 +7,7 @@ import ClientHandler
 from button import button
 from polyModel import polyModel
 import time
+import util
 
 # Some global variables: Our Test Names
 TEST1 = "Skeleton Full"
@@ -330,7 +331,7 @@ class WorkThread(QtCore.QThread):
             hand.setPositionOffset(x,y,z)
             time.sleep(2)
 
-            if ( not ( isPressed ( buttonPosition, HP, .01, .01, 3 ) ) ):
+            if ( not ( util.isPressed ( buttonPosition, HP, .01, .01, 3 ) ) ):
                 break
                 #marker = polyModel(greenPath, greenModel)
                 #marker.attachTrackModel(hand)
