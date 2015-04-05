@@ -15,6 +15,15 @@ class util():
 		return
 
 	@staticmethod
+	def alwaysTrue():
+		return True 
+
+	@staticmethod
+	def alwaysFalse():
+		return False 
+
+
+	@staticmethod
 	def isOver(pos1,pos2,w,l): 
 		#pos1 and pos2 is a length 3 tuple, where pos1 is the acting button with width and height w,l and pos2 is the thing pressing the button
 		X1 = pos1[0] - w/2
