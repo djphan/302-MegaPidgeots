@@ -1,0 +1,29 @@
+Settings Documents
+===
+
+Projector View
+===
+
+* Rotational: Set all values to 1
+* Set FOV to 67
+
+
+Bone Center Points
+===
+To test bone position, use y = 0.0300
+
+
+* C1
+	x = -0.015
+	y = <same as skeleton>
+	z = 0.220
+
+* T1
+	x = -0.010
+	y = <same as skeleton>
+	z = 0.094 
+
+* L1
+	x = -0.010
+	y = <same as skeleton>
+	z = -0.330
