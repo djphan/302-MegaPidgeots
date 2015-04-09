@@ -1,0 +1,10 @@
+Letters: 
+
+Rotation [0, 0, -1]
+Scale	 [.02, .02, .02]
+
+White Square
+
+Rotation [1, 1, -1]
+Scale [.01, .01, .01]
+
