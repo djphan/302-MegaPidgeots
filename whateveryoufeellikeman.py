@@ -40,16 +40,16 @@ T1Model = "T1"
 L1Model = "L1"
 
 handPath = "Blue.OSGB"
-navPath = "Orange.OSGB"
+navPath = "OrangeSphere.OSGB"
 buttonPath = "HAND.OSGB"
 greenPath = "GREEN.OSGB"
 
-#def print(*arg, **kwargs):
-	#for args in arg:
-		#f1 = open('printlog.txt', 'a')
-		#f1.write(args)
-		#f1.write("\n")
-		#f1.close()
+def print(*arg, **kwargs):
+	for args in arg:
+		f1 = open('printlog.txt', 'a')
+		f1.write(args)
+		f1.write("\n")
+		f1.close()
 
 # A function for handling individual bone tests
 def askForBone(expectedPosition):
@@ -62,18 +62,21 @@ def askForBone(expectedPosition):
 	# Set up button hand and navigation hand
 	hand = polyModel(handPath, handButtModel)
 	navHand = polyModel(navPath, handNavModel)
-
+	print("Waiting for button press")
 	# Wait for button press
 	while (1):
 		handPosition = hand.getPositionOffset()
-		if (util.isOver(buttonPosition, handPosition, 1.5, 1.5)):
+		if (util.isOver(buttonPosition, handPosition, 1.1, 1.1)):
 			# Get the position of the navigation hand and check if it is in the right place
 			navPosition = navHand.getPositionOffset()
-			if (util.isOver(navPosition, expectedPosition, 1.5, 1.5)):
+			if (util.isOver(navPosition, expectedPosition, 1.1, 1.1)):
 				CORRECT += 1
+				print("Got the correct answer!")
+			else:
+				print("Answer was wrong :(")
 
 			# Draw a circle at the expected position
-			SceneManager.getModel(circleModel).setPositionOffset(expectedPosition)
+			SceneManager.getModel(circleModel).setPositionOffset(expectedPosition[0], expectedPosition[1], expectedPosition[2])
 			SceneManager.addNodeToScene(circleModel, "projectorView")
 			time.sleep(2)
 
@@ -151,7 +154,6 @@ class SetupTab(QtGui.QWidget):
 		self.combo = QtGui.QComboBox(self)
 		self.combo.addItem(TEST1)
 		self.combo.addItem(TEST2)
-
 		# Test image
 		self.img = QtGui.QLabel(self)
 		pixmap = QtGui.QPixmap('spooky.png')
@@ -332,6 +334,9 @@ class WorkThread(QtCore.QThread):
 		old = 0
 		new = 0
 
+
+		print("Running the Test")
+
 		# Begin timer
 		startTime = time.time()
 
@@ -341,21 +346,26 @@ class WorkThread(QtCore.QThread):
 				new = randint(1, 3)
 
 			if new == 1:
-				SceneManager.getModel(C1Model).setPositionOffset((0.35, 0, 0.3))
+				print("C1")
+				SceneManager.getModel(C1Model).setPositionOffset(0.35, 0, 0.3)
 				SceneManager.addNodeToScene(C1Model, "projectorView")
 				askForBone(C1)
 				SceneManager.removeNodeFromScene(C1Model, "projectorView")
 			elif new == 2:
-				SceneManager.getModel(T1Model).setPositionOffset((0.35, 0, 0.3))
+				print("T1")
+				SceneManager.getModel(T1Model).setPositionOffset(0.35, 0, 0.3)
 				SceneManager.addNodeToScene(T1Model, "projectorView")
 				askForBone(T1)
 				SceneManager.removeNodeFromScene(T1Model, "projectorView")
 			else:
+				print("L1")
 				# Display text for bone we want in projector view
-				SceneManager.getModel(L1Model).setPositionOffset((0.35, 0, 0.3))
+				SceneManager.getModel(L1Model).setPositionOffset(0.35, 0, 0.3)
 				SceneManager.addNodeToScene(L1Model, "projectorView")
 				askForBone(L1)
 				SceneManager.removeNodeFromScene(L1Model, "projectorView")
+
+			old = new
 
 		# Get the time after the 10 iterations
 		endTime = time.time()
@@ -438,6 +448,8 @@ class WorkThread(QtCore.QThread):
 
 if __name__ == '__main__':
 	import sys
+
+	print("Starting")
 	# Load button and hand models
 	SceneManager.loadPolygonModel(navPath, handNavModel)
 	SceneManager.loadPolygonModel(handPath, handButtModel)
@@ -448,24 +460,37 @@ if __name__ == '__main__':
 	SceneManager.getModel(circleModel).setScale(0.03, 0.03, 0.03)
 	SceneManager.addNodeToScene(circleModel,"mainView")
 
+	#print("Added green sphere")
+
 	# Create text but do not load into view
 	SceneManager.loadPolygonModel("C1.OSGB", C1Model)
 	SceneManager.getModel(C1Model).setScale(0.02, 0.02, 0.02)
 	SceneManager.getModel(C1Model).setPositionOffset(0, 0, -1)
 	SceneManager.addNodeToScene(C1Model,"mainView")
-	SceneManager.loadPolygonModel("T1.OSGB", C1Model)
+
+	#print("Added C1")
+
+	SceneManager.loadPolygonModel("T1.OSGB", T1Model)
 	SceneManager.getModel(T1Model).setScale(0.02, 0.02, 0.02)
 	SceneManager.getModel(T1Model).setPositionOffset(0, 0, -1)
 	SceneManager.addNodeToScene(T1Model,"mainView")
-	SceneManager.loadPolygonModel("L1.OSGB", C1Model)
+
+	#print("Added T1")
+
+	SceneManager.loadPolygonModel("L1.OSGB", L1Model)
 	SceneManager.getModel(T1Model).setScale(0.02, 0.02, 0.02)
 	SceneManager.getModel(T1Model).setPositionOffset(0, 0, -1)
 	SceneManager.addNodeToScene(L1Model,"mainView")
+
+	#print("Added L1")
+
 	SceneManager.loadPolygonModel("WhiteSquare.OSGB", "White Sqr")
 	SceneManager.getModel("White Sqr").setScale(0.01, 0.01, 0.01)
 	SceneManager.getModel("White Sqr").setPositionOffset(1, 1, -1)
 	SceneManager.addNodeToScene("White Sqr","mainView")
 	SceneManager.addNodeToScene("White Sqr", "projectorView")
+
+	print("Added all the models")
 
 	#Scale Button Hand Models
 	SceneManager.getModel(handNavModel).setScale(.02,.02,.02)
