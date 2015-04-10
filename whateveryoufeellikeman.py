@@ -23,15 +23,15 @@ PATH2 = "Skeleton_Back.OSGB"
 # Keep track of correct answers
 CORRECT = 0
 # Number of iterations in the test
-ITERATIONS = 10
+ITERATIONS = 100
 
 # List of rigid bodies
 rbList = []
 
 # Coordinates of bones to be tested
-C1 = (-0.015, 0, 0.22)
-T1 = (-0.01, 0, 0.094)
-L1 = (-0.01, 0, -0.33)
+C1 = (0.1, 0, 0.26)
+T1 = (0.1, 0, 0.190)
+L1 = (0.1, 0, -0.019)
 
 handNavModel = "NAVIGATION HAND"
 handButtModel = "BUTTON HAND"
@@ -81,23 +81,22 @@ def askForBone(expectedPosition):
 		#print(" Rigid: " + str(rbButtHand.getPosition()))
 		handPosition = util.addTuple(hand.getPositionOffset(), rbButtHand.getPosition())
 		#print("handPosition:" +str(handPosition))
-		if (util.isOver(buttonPosition, handPosition, 1.1, 1.1)):
+		time.sleep(0.1)
+		if (util.isOver(buttonPosition, handPosition, 0.5, 0.5)):
 			# Get the position of the navigation hand and check if it is in the right place
 			navPosition = util.addTuple(navHand.getPositionOffset(), rbNavHand.getPosition())
 			#print("navPosition: " + str(navPosition))
-			if (util.isOver(navPosition, expectedPosition, 1, 1)):
+			if (util.isOver(navPosition, expectedPosition, 0.5, 0.5)):
 				CORRECT += 1
 				print("Got the correct answer!")
 			else:
 				print("Answer was wrong :(")
 
-			# Draw a circle at the expected position
-			SceneManager.getModel(circleModel).setPositionOffset(expectedPosition[0], expectedPosition[1], expectedPosition[2])
-			SceneManager.addNodeToScene(circleModel, "projectorView")
+
+			# Draw Aedan's Skeletons
 			time.sleep(2)
 
 			# Delete circle
-			SceneManager.removeNodeFromScene(circleModel, "projectorView")
 			break
 	return
 
@@ -166,6 +165,10 @@ class SetupTab(QtGui.QWidget):
 		font.setPointSize(14)
 		instruText.setFont(font)
 
+		# Display Position
+		position = QtGui.QLabel("Current Position: (0, 0, 0)")
+
+
 		# Items that can be selected from the drop-down menu
 		self.combo = QtGui.QComboBox(self)
 		self.combo.addItem(TEST1)
@@ -195,6 +198,7 @@ class SetupTab(QtGui.QWidget):
 		mainVbox = QtGui.QVBoxLayout()
 		mainVbox.stretch(1)
 		mainVbox.addWidget(instruText)
+		mainVbox.addWidget(position)
 		mainVbox.addWidget(self.combo)
 		mainVbox.addWidget(self.descriptionText)
 		mainVbox.addWidget(self.img)
@@ -242,9 +246,9 @@ class SetupTab(QtGui.QWidget):
 		SceneManager.loadPolygonModel(path, model)
 
 		#Scale Skeleton
-		SceneManager.getModel(model).setScale(.05,.05,.05)
+		SceneManager.getModel(model).setScale(.025,.025,.025)
 		SceneManager.getModel(model).setRotationOffset(0,0,-1,1)
-		SceneManager.getModel(model).setPositionOffset(0,.15,-1.7)
+		SceneManager.getModel(model).setPositionOffset(0.105,0.15,-0.711)
 		SceneManager.addNodeToScene(model,"mainView")
 		SceneManager.addNodeToScene(model,"projectorView")
 
@@ -365,20 +369,20 @@ class WorkThread(QtCore.QThread):
 			print("After While Loop")
 			if new == 1:
 				print("C1")
-				SceneManager.getModel(C1Model).setPositionOffset(0.35, 0, 0.3)
+				SceneManager.getModel(C1Model).setPositionOffset(0.35, 0, -0.09)
 				SceneManager.addNodeToScene(C1Model, "projectorView")
 				askForBone(C1)
 				SceneManager.removeNodeFromScene(C1Model, "projectorView")
 			elif new == 2:
 				print("T1")
-				SceneManager.getModel(T1Model).setPositionOffset(0.35, 0, 0.3)
+				SceneManager.getModel(T1Model).setPositionOffset(0.35, 0, -0.09)
 				SceneManager.addNodeToScene(T1Model, "projectorView")
 				askForBone(T1)
 				SceneManager.removeNodeFromScene(T1Model, "projectorView")
 			else:
 				print("L1")
 				# Display text for bone we want in projector view
-				SceneManager.getModel(L1Model).setPositionOffset(0.35, 0, 0.3)
+				SceneManager.getModel(L1Model).setPositionOffset(0.35, 0, -0.09)
 				SceneManager.addNodeToScene(L1Model, "projectorView")
 				askForBone(L1)
 				SceneManager.removeNodeFromScene(L1Model, "projectorView")
@@ -419,54 +423,45 @@ if __name__ == '__main__':
 	SceneManager.loadPolygonModel(handPath, handButtModel)
 	SceneManager.loadPolygonModel(buttonPath, buttonModel)
 
-	# Create circle but do not load into view
-	SceneManager.loadPolygonModel("GreenSphere.OSGB", circleModel)
-	SceneManager.getModel(circleModel).setScale(0.03, 0.03, 0.03)
-	SceneManager.addNodeToScene(circleModel,"mainView")
-
-	#print("Added green sphere")
 
 	# Create text but do not load into view
 	SceneManager.loadPolygonModel("C1.OSGB", C1Model)
-	SceneManager.getModel(C1Model).setScale(0.02, 0.02, 0.02)
-	SceneManager.getModel(C1Model).setPositionOffset(0, 0, -1)
+	SceneManager.getModel(C1Model).setScale(0.005, 0.005, 0.005)
+	SceneManager.getModel(C1Model).setPositionOffset(0.350, 0, -0.090)
+	SceneManager.getModel(C1Model).setRotationOffset(0, 0, -1, 1)
 	SceneManager.addNodeToScene(C1Model,"mainView")
-
 	#print("Added C1")
 
 	SceneManager.loadPolygonModel("T1.OSGB", T1Model)
-	SceneManager.getModel(T1Model).setScale(0.02, 0.02, 0.02)
-	SceneManager.getModel(T1Model).setPositionOffset(0, 0, -1)
+	SceneManager.getModel(T1Model).setScale(0.005, 0.005, 0.005)
+	SceneManager.getModel(T1Model).setPositionOffset(0.350, 0, -0.090)
+	SceneManager.getModel(T1Model).setRotationOffset(0, 0, -1,1)
 	SceneManager.addNodeToScene(T1Model,"mainView")
 
 	#print("Added T1")
 
 	SceneManager.loadPolygonModel("L1.OSGB", L1Model)
-	SceneManager.getModel(T1Model).setScale(0.02, 0.02, 0.02)
-	SceneManager.getModel(T1Model).setPositionOffset(0, 0, -1)
+	SceneManager.getModel(L1Model).setScale(0.005, 0.005, 0.005)
+	SceneManager.getModel(L1Model).setPositionOffset(0.350, 0, -0.090)
+	SceneManager.getModel(L1Model).setRotationOffset(0, 0, -1, 1)
 	SceneManager.addNodeToScene(L1Model,"mainView")
 
 	#print("Added L1")
 
-	SceneManager.loadPolygonModel("WhiteSquare.OSGB", "White Sqr")
-	SceneManager.getModel("White Sqr").setScale(0.01, 0.01, 0.01)
-	SceneManager.getModel("White Sqr").setPositionOffset(1, 1, -1)
-	SceneManager.addNodeToScene("White Sqr","mainView")
-	SceneManager.addNodeToScene("White Sqr", "projectorView")
 
 	print("Added all the models")
 
 	#Scale Button Hand Models
-	SceneManager.getModel(handNavModel).setScale(.02,.02,.02)
+	SceneManager.getModel(handNavModel).setScale(.006,.006,.006)
 	SceneManager.getModel(handNavModel).setPositionOffset(0,0.3,0)
-	SceneManager.getModel(handNavModel).setRotationOffset(1,0,0,1)
-	SceneManager.getModel(handButtModel).setScale(.02,.02,.02)
+	SceneManager.getModel(handNavModel).setRotationOffset(0,0,0,1)
+	SceneManager.getModel(handButtModel).setScale(.006,.006,.006)
 	SceneManager.getModel(handButtModel).setPositionOffset(0,0.3,0)
-	SceneManager.getModel(handButtModel).setRotationOffset(1,0,0,1)
+	SceneManager.getModel(handButtModel).setRotationOffset(0,0,0,1)
 
 	# Scale button for user to push
-	SceneManager.getModel(buttonModel).setPositionOffset(-.3,.15,-.2)
-	SceneManager.getModel(buttonModel).setScale(.02,.02,.02)
+	SceneManager.getModel(buttonModel).setPositionOffset(0.267,.15,0.232)
+	SceneManager.getModel(buttonModel).setScale(.01,.01,.01)
 
 	# Add models to main view
 	SceneManager.addNodeToScene(buttonModel,"mainView")
@@ -483,15 +478,13 @@ if __name__ == '__main__':
 	numRB = len(rbList)
 	print("\nNum of rigid bodies:"+str(numRB))
 	# We want to attach only if we have enough rigid bodies
-	if numRB > 2:
+	if numRB > 1:
 		SceneManager.getModel(handNavModel).attachRigidBodyById(rbList[0])
 		SceneManager.getModel(handButtModel).attachRigidBodyById(rbList[1])
-		#SceneManager.getModel(buttonModel).attachRigidBodyById(rbList[2])
-
+		
 		# Get rigid bodies
 		rbNavHand = ClientHandler.getRigidBody(rbList[0])
 		rbButtHand = ClientHandler.getRigidBody(rbList[1])
-		#rbButton = ClientHandler.getRigidBody(rbList[2])
 
 	# Start the GUI
 	app = QtGui.QApplication(sys.argv)
