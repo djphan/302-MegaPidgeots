@@ -25,6 +25,9 @@ CORRECT = 0
 # Number of iterations in the test
 ITERATIONS = 10
 
+# List of rigid bodies
+rbList = []
+
 # Coordinates of bones to be tested
 C1 = (-0.015, 0, 0.22)
 T1 = (-0.01, 0, 0.094)
@@ -39,7 +42,12 @@ C1Model = "C1"
 T1Model = "T1"
 L1Model = "L1"
 
-handPath = "Blue.OSGB"
+# Rigid Bodies attached to each model
+rbButtHand = 0
+rbNavHand = 0
+rbButton = 0
+
+handPath = "BlueSphere.OSGB"
 navPath = "OrangeSphere.OSGB"
 buttonPath = "HAND.OSGB"
 greenPath = "GREEN.OSGB"
@@ -57,7 +65,10 @@ def askForBone(expectedPosition):
 
 	# Set up button
 	buttonZ = polyModel(buttonPath, buttonModel)
+	#buttonPosition = util.addTuple(buttonZ.getPositionOffset(), rbButton.getPositionOffset())
 	buttonPosition = buttonZ.getPositionOffset()
+
+	print("buttonPosition: " + str(buttonPosition))
 
 	# Set up button hand and navigation hand
 	hand = polyModel(handPath, handButtModel)
@@ -65,11 +76,16 @@ def askForBone(expectedPosition):
 	print("Waiting for button press")
 	# Wait for button press
 	while (1):
-		handPosition = hand.getPositionOffset()
+		#print(" Model: " + str(hand.getPositionOffset()))
+		#print(str(rbButtHand)+" has id: "+str(rbButtHand.getID())) 
+		#print(" Rigid: " + str(rbButtHand.getPosition()))
+		handPosition = util.addTuple(hand.getPositionOffset(), rbButtHand.getPosition())
+		#print("handPosition:" +str(handPosition))
 		if (util.isOver(buttonPosition, handPosition, 1.1, 1.1)):
 			# Get the position of the navigation hand and check if it is in the right place
-			navPosition = navHand.getPositionOffset()
-			if (util.isOver(navPosition, expectedPosition, 1.1, 1.1)):
+			navPosition = util.addTuple(navHand.getPositionOffset(), rbNavHand.getPosition())
+			#print("navPosition: " + str(navPosition))
+			if (util.isOver(navPosition, expectedPosition, 1, 1)):
 				CORRECT += 1
 				print("Got the correct answer!")
 			else:
@@ -102,7 +118,7 @@ class TabDialog(QtGui.QDialog):
 		buttonBox.rejected.connect(self.reject)
 
 		mainLayout = QtGui.QVBoxLayout()
-		mainLayout.addWidget(tabWidget)
+		mainLayout.addWidget(tabWidget)	
 		mainLayout.addWidget(buttonBox)
 		self.setLayout(mainLayout)
 
@@ -334,17 +350,19 @@ class WorkThread(QtCore.QThread):
 		old = 0
 		new = 0
 
-
 		print("Running the Test")
 
 		# Begin timer
 		startTime = time.time()
+		print("Start Timer")
 
 		for i in range(ITERATIONS):
 			# Randomly choose a bone. Make sure we don't ask for same bone twice.
+			print("Starting For Loop")
 			while new == old:
 				new = randint(1, 3)
 
+			print("After While Loop")
 			if new == 1:
 				print("C1")
 				SceneManager.getModel(C1Model).setPositionOffset(0.35, 0, 0.3)
@@ -385,60 +403,6 @@ class WorkThread(QtCore.QThread):
 		f.write(accuracy+'\n')
 		f.write(elapsedTime+'\n')
 		f.close()
-
-		"""
-		# Get button position once since its position is static
-		buttonZ= polyModel(buttonPath,buttonModel)
-		buttonPosition = buttonZ.getPositionOffset()
-
-		# Get the initial hand position
-		hand = polyModel(handPath,handButtModel)
-		handPosition = hand.getPositionOffset()
-
-		#Get the hand navigation model
-
-		navHand = polyModel(navPath, handNavModel)
-		navPosition = navHand.getPositionOffset()
-		marker = None
-
-		# Wait for a collision with the button
-		print("Inital Button Position: "+str(buttonPosition))
-		print("Inital Hand Position: "+str(handPosition))
-
-		#buttonZ.attachTrackModel(hand)
-
-
-		# Flag to Double Tap
-		buttonflag = 0
-		while (1):
-
-			result = navHand.getPositionOffset()
-
-			HP = hand.getPositionOffset()
-			x = HP[0]
-			y = HP[1]
-			z = HP[2]
-			x -= .001
-			#y -= .001
-			z -= .000125
-			hand.setPositionOffset(x,y,z)
-			time.sleep(.01)
-			util.test()
-			if (  util.isOver ( buttonPosition, HP, .71, .71)  ):
-				break
-				#marker = polyModel(greenPath, greenModel)
-				#marker.attachTrackModel(hand)
-				#marker.setPositionOffset(result[0], result[1], result[2])
-
-				# Sleep to delay next loop iteration
-				#time.sleep(2)
-				#break
-
-		#Print results to file.
-		#answers in a seperate part of the GUI
-
-		print(">>>> A collision occured <<<<")
-		"""
 
 		# Terminate the thread when we are done!!
 		self.terminate()
@@ -494,14 +458,14 @@ if __name__ == '__main__':
 
 	#Scale Button Hand Models
 	SceneManager.getModel(handNavModel).setScale(.02,.02,.02)
-	SceneManager.getModel(handNavModel).setPositionOffset(0,1,0)
+	SceneManager.getModel(handNavModel).setPositionOffset(0,0.3,0)
 	SceneManager.getModel(handNavModel).setRotationOffset(1,0,0,1)
 	SceneManager.getModel(handButtModel).setScale(.02,.02,.02)
-	SceneManager.getModel(handButtModel).setPositionOffset(0,1,0)
+	SceneManager.getModel(handButtModel).setPositionOffset(0,0.3,0)
 	SceneManager.getModel(handButtModel).setRotationOffset(1,0,0,1)
 
 	# Scale button for user to push
-	SceneManager.getModel(buttonModel).setPositionOffset(-.4,.15,-.4)
+	SceneManager.getModel(buttonModel).setPositionOffset(-.3,.15,-.2)
 	SceneManager.getModel(buttonModel).setScale(.02,.02,.02)
 
 	# Add models to main view
@@ -522,7 +486,12 @@ if __name__ == '__main__':
 	if numRB > 2:
 		SceneManager.getModel(handNavModel).attachRigidBodyById(rbList[0])
 		SceneManager.getModel(handButtModel).attachRigidBodyById(rbList[1])
-		SceneManager.getModel(buttonModel).attachRigidBodyById(rbList[2])
+		#SceneManager.getModel(buttonModel).attachRigidBodyById(rbList[2])
+
+		# Get rigid bodies
+		rbNavHand = ClientHandler.getRigidBody(rbList[0])
+		rbButtHand = ClientHandler.getRigidBody(rbList[1])
+		#rbButton = ClientHandler.getRigidBody(rbList[2])
 
 	# Start the GUI
 	app = QtGui.QApplication(sys.argv)
