@@ -19,6 +19,10 @@ MODEL1 = "skeleton1"
 MODEL2 = "skeleton2"
 PATH1 = "Skeleton_Full.OSGB"
 PATH2 = "Skeleton_Back.OSGB"
+C1Ans = "SkelC1HighLighted.OSGB"
+T1Ans = "SkelT1HighLighted.OSGB"
+L1Ans = "SkelL1HighLighted.OSGB"
+
 
 # Keep track of correct answers
 CORRECT = 0
@@ -82,18 +86,16 @@ def askForBone(expectedPosition):
 		handPosition = util.addTuple(hand.getPositionOffset(), rbButtHand.getPosition())
 		#print("handPosition:" +str(handPosition))
 		time.sleep(0.1)
-		if (util.isOver(buttonPosition, handPosition, 0.5, 0.5)):
+		if (util.isOver(buttonPosition, handPosition, 0.3, 0.3)):
 			# Get the position of the navigation hand and check if it is in the right place
 			navPosition = util.addTuple(navHand.getPositionOffset(), rbNavHand.getPosition())
 			#print("navPosition: " + str(navPosition))
-			if (util.isOver(navPosition, expectedPosition, 0.5, 0.5)):
+			if (util.isOver(navPosition, expectedPosition, 0.3, 0.3)):
 				CORRECT += 1
 				print("Got the correct answer!")
 			else:
 				print("Answer was wrong :(")
 
-
-			# Draw Aedan's Skeletons
 			time.sleep(2)
 
 			# Delete circle
@@ -252,6 +254,33 @@ class SetupTab(QtGui.QWidget):
 		SceneManager.addNodeToScene(model,"mainView")
 		SceneManager.addNodeToScene(model,"projectorView")
 
+		# Load Skeleton C1 Answer
+		SceneManager.loadPolygonModel(C1Ans, C1Ans)
+
+		#Scale Skeleton
+		SceneManager.getModel(C1Ans).setScale(.025,.025,.025)
+		SceneManager.getModel(C1Ans).setRotationOffset(0,0,-1,1)
+		SceneManager.getModel(C1Ans).setPositionOffset(0.105,0.15,-0.711)
+		SceneManager.addNodeToScene(C1Ans,"mainView")
+
+		# Load Skeleton T1 Answer
+		SceneManager.loadPolygonModel(T1Ans, T1Ans)
+
+		#Scale Skeleton
+		SceneManager.getModel(T1Ans).setScale(.025,.025,.025)
+		SceneManager.getModel(T1Ans).setRotationOffset(0,0,-1,1)
+		SceneManager.getModel(T1Ans).setPositionOffset(0.105,0.15,-0.711)
+		SceneManager.addNodeToScene(T1Ans,"mainView")
+
+		# Load Skeleton
+		SceneManager.loadPolygonModel(L1Ans, L1Ans)
+
+		#Scale Skeleton
+		SceneManager.getModel(L1Ans).setScale(.025,.025,.025)
+		SceneManager.getModel(L1Ans).setRotationOffset(0,0,-1,1)
+		SceneManager.getModel(L1Ans).setPositionOffset(0.105,0.15,-0.711)
+		SceneManager.addNodeToScene(L1Ans,"mainView")
+
 		# Start thread for running test!
 		self.thread = WorkThread()
 		self.thread.start()
@@ -372,12 +401,20 @@ class WorkThread(QtCore.QThread):
 				SceneManager.getModel(C1Model).setPositionOffset(0.35, 0, -0.09)
 				SceneManager.addNodeToScene(C1Model, "projectorView")
 				askForBone(C1)
+				SceneManager.removeNodeFromScene(MODEL1, "projectorView")
+				SceneManager.addNodeToScene(C1Ans,"projectorView")
+				time.sleep(4)
+				SceneManager.removeNodeFromScene(C1Ans,"projectorView")
 				SceneManager.removeNodeFromScene(C1Model, "projectorView")
 			elif new == 2:
 				print("T1")
 				SceneManager.getModel(T1Model).setPositionOffset(0.35, 0, -0.09)
 				SceneManager.addNodeToScene(T1Model, "projectorView")
 				askForBone(T1)
+				SceneManager.removeNodeFromScene(MODEL1, "projectorView")
+				SceneManager.addNodeToScene(T1Ans,"projectorView")
+				time.sleep(4)
+				SceneManager.removeNodeFromScene(T1Ans,"projectorView")
 				SceneManager.removeNodeFromScene(T1Model, "projectorView")
 			else:
 				print("L1")
@@ -385,9 +422,14 @@ class WorkThread(QtCore.QThread):
 				SceneManager.getModel(L1Model).setPositionOffset(0.35, 0, -0.09)
 				SceneManager.addNodeToScene(L1Model, "projectorView")
 				askForBone(L1)
+				SceneManager.removeNodeFromScene(MODEL1, "projectorView")
+				SceneManager.addNodeToScene(L1Ans,"projectorView")
+				time.sleep(4)
+				SceneManager.removeNodeFromScene(L1Ans,"projectorView")
 				SceneManager.removeNodeFromScene(L1Model, "projectorView")
 
 			old = new
+			SceneManager.addNodeToScene(MODEL1,"projectorView")
 
 		# Get the time after the 10 iterations
 		endTime = time.time()
