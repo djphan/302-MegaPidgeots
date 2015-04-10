@@ -35,4 +35,4 @@ To test bone position, use y = 0.0300
 * L1
 	x = 0.1
 	y = <same as skeleton>
-	z = 0.019
+	z = -0.019
