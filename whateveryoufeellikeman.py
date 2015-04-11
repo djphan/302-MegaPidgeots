@@ -10,6 +10,7 @@ from util import util
 import datetime
 from random import randint
 from PyQt4 import QtCore, QtGui
+from errorMessage import ErrorMessage
 
 
 # Some global variables: Our Test Names
@@ -26,11 +27,17 @@ L1Ans = "SkelL1HighLighted.OSGB"
 
 # Keep track of correct answers
 CORRECT = 0
+CURRENT = 0
 # Number of iterations in the test
 ITERATIONS = 100
 
 # List of rigid bodies
 rbList = []
+
+# Some globals for the results tab
+usersAns = ""
+correctAns = ""
+verdict = ""
 
 # Coordinates of bones to be tested
 C1 = (0.1, 0, 0.26)
@@ -54,7 +61,7 @@ rbButton = 0
 handPath = "BlueSphere.OSGB"
 navPath = "OrangeSphere.OSGB"
 buttonPath = "HAND.OSGB"
-greenPath = "GREEN.OSGB"
+greenPath = "GreenSphere.OSGB"
 
 def print(*arg, **kwargs):
 	for args in arg:
@@ -66,6 +73,10 @@ def print(*arg, **kwargs):
 # A function for handling individual bone tests
 def askForBone(expectedPosition):
 	global CORRECT
+	global verdict
+	global CURRENT
+	global usersAns
+	global correctAns
 
 	# Set up button
 	buttonZ = polyModel(buttonPath, buttonModel)
@@ -92,17 +103,21 @@ def askForBone(expectedPosition):
 			#print("navPosition: " + str(navPosition))
 			if (util.isOver(navPosition, expectedPosition, 0.3, 0.3)):
 				CORRECT += 1
+				verdict = "Correct!"
 				print("Got the correct answer!")
 			else:
-				print("Answer was wrong :(")
+				verdict = "Incorrect"
+				print("Answer was wrong")
 
-			time.sleep(2)
-
-			# Delete circle
+			navRBHand = rbNavHand.getPosition()
+			SceneManager.getModel(greenModel).setPositionOffset(navRBHand[0], navRBHand[1], navRBHand[2])
+			SceneManager.addNodeToScene(greenModel, "projectorView")
+			
+			# Results tab housekeeping
+			CURRENT += 1
+			usersAns = str(navPosition)
+			correctAns = str(expectedPosition)
 			break
-	return
-
-
 
 class TabDialog(QtGui.QDialog):
 	def __init__(self, parent=None):
@@ -308,70 +323,47 @@ class ResultsTab(QtGui.QWidget):
 	def __init__(self, parent=None):
 		super(ResultsTab, self).__init__(parent)
 
-		f = open('TEST_RESULTS.txt')
-		lines = [line.strip('\n') for line in f.readlines()]
+		self.layout = QtGui.QVBoxLayout(self)
+		self.button = QtGui.QPushButton("Pull Current Test Results")
+		self.connect(self.button, QtCore.SIGNAL("released()"), self.buttonPress)
+		self.resultList = QtGui.QListWidget(self)
+		self.layout.addWidget(self.button)
+		self.layout.addWidget(self.resultList)
 
-		# Create a push button that links to a file dialog
-		self.fileButton = QtGui.QPushButton("Open Results Record")
-		self.fileButton.clicked.connect(self.getResults)
+		self.threadPool = []
 
-		fileLabel = QtGui.QLabel('Record File: ')
-		testLabel = QtGui.QLabel('Test Type: ')
-		dateLabel = QtGui.QLabel('Date of Test: ')
-		timeTakeLabel = QtGui.QLabel('Time Taken to Complete: ')
-		accuracyLabel = QtGui.QLabel('Accuracy: ')
+	def updateList(self, text):
+		self.resultList.addItem(text)
 
-		self.file = QtGui.QLabel('Test File')
-		self.test = QtGui.QLabel(lines[0])
-		self.date = QtGui.QLabel(lines[1])
-		self.timeTake = QtGui.QLabel(lines[2])
-		self.accuracy = QtGui.QLabel(lines[3])
-		fill = QtGui.QLabel('')
+	def buttonPress(self):
+		self.resultList.clear()
+		self.threadPool.append(UpdateResultsThread())
+		self.connect(self.threadPool[len(self.threadPool)-1], QtCore.SIGNAL("update(QString)"), self.updateList)
+		self.threadPool[len(self.threadPool)-1].start()
 
-		grid = QtGui.QGridLayout()
-		grid.setSpacing(10)
-		grid.addWidget(fileLabel, 1, 0)
-		grid.addWidget(self.file, 1, 1)
-		grid.addWidget(testLabel, 2, 0)
-		grid.addWidget(self.test, 2, 1)
-		grid.addWidget(dateLabel, 3, 0)
-		grid.addWidget(self.date, 3, 1)
-		grid.addWidget(timeTakeLabel, 4, 0)
-		grid.addWidget(self.timeTake, 4, 1)
-		grid.addWidget(accuracyLabel, 5, 0)
-		grid.addWidget(self.accuracy, 5, 1)
-		grid.addWidget(self.fileButton, 6, 0, 1, 1)
-		grid.addWidget(fill, 7, 0, 10, 5)
-		self.setLayout(grid)
+# A thread to update the UI
+class UpdateResultsThread(QtCore.QThread):
+	def __init__(self):
+		QtCore.QThread.__init__(self)
 
-	# Uses file dialog to get path to results
-	def getResults(self):
-		path = QtGui.QFileDialog.getOpenFileName(self, "Open Results File", "", 'Text Files (*.txt)')
+	def __del__(self):
+		self.wait()
 
-		# convert path to a string
-		path = str(path)
+	def run(self):
+		global usersAns
+		global correctAns
+		global CORRECT
+		global CURRENT
+		self.emit(QtCore.SIGNAL('update(QString)'), "Users Answer: "+usersAns)
+		self.emit(QtCore.SIGNAL('update(QString)'), "Expected Answer: "+correctAns)
+		self.emit(QtCore.SIGNAL('update(QString)'), verdict)
+		if CURRENT == 0:
+			self.emit(QtCore.SIGNAL('update(QString)'), "Accuracy: ")
+		else:
+			percent = (float(CORRECT)/float(CURRENT)) * 100.0
+			self.emit(QtCore.SIGNAL('update(QString)'), "Accuracy: "+str(percent)+"%")
 
-		# get filename from path
-		(dir, name) = os.path.split(path)
-
-		# Read the selected results file, removed newline characters
-		f = open(path)
-		lines = [line.strip('\n') for line in f.readlines()]
-
-		# Check that the file has at least 4 lines
-		if len(lines) < 4:
-			title = "Invalid File"
-			error = "Please select a valid results file."
-			QtGui.QMessageBox.critical(None, title, error, QtGui.QMessageBox.Close)
-			return
-
-		self.file = QtGui.QLabel(name)
-		self.test = QtGui.QLabel(lines[0])
-		self.date = QtGui.QLabel(lines[1])
-		self.timeTake = QtGui.QLabel(lines[2])
-		self.accuracy = QtGui.QLabel(lines[3])
-		return
-
+# A thread to run the tests on OptiTrack
 class WorkThread(QtCore.QThread):
 	def __init__(self):
 		QtCore.QThread.__init__(self)
@@ -429,6 +421,7 @@ class WorkThread(QtCore.QThread):
 				SceneManager.removeNodeFromScene(L1Model, "projectorView")
 
 			old = new
+			SceneManager.removeNodeFromScene(greenModel, "projectorView")
 			SceneManager.addNodeToScene(MODEL1,"projectorView")
 
 		# Get the time after the 10 iterations
@@ -442,13 +435,7 @@ class WorkThread(QtCore.QThread):
 		# Write results to a file
 		date = datetime.datetime.now().strftime("%B %d %I:%M%p")
 		testName = "Skeleton Full"
-		fileName = 'Results'+date;
-		f = open(fileName,'w')
-		f.write(testName+'\n')
-		f.write(date+'\n')
-		f.write(accuracy+'\n')
-		f.write(elapsedTime+'\n')
-		f.close()
+
 
 		# Terminate the thread when we are done!!
 		self.terminate()
@@ -464,7 +451,12 @@ if __name__ == '__main__':
 	SceneManager.loadPolygonModel(navPath, handNavModel)
 	SceneManager.loadPolygonModel(handPath, handButtModel)
 	SceneManager.loadPolygonModel(buttonPath, buttonModel)
+	SceneManager.loadPolygonModel(greenPath, greenModel)
 
+
+	# Scale the Green Circle
+	SceneManager.getModel(greenModel).setScale(0.01, 0.01, 0.01)
+	SceneManager.addNodeToScene(greenModel, "mainView")
 
 	# Create text but do not load into view
 	SceneManager.loadPolygonModel("C1.OSGB", C1Model)
@@ -528,8 +520,12 @@ if __name__ == '__main__':
 		rbNavHand = ClientHandler.getRigidBody(rbList[0])
 		rbButtHand = ClientHandler.getRigidBody(rbList[1])
 
-	# Start the GUI
-	app = QtGui.QApplication(sys.argv)
-	tabdialog = TabDialog()
-	sys.exit(tabdialog.exec_())
+		# Start the GUI
+		app = QtGui.QApplication(sys.argv)
+		tabdialog = TabDialog()
+		sys.exit(tabdialog.exec_())
+	else:
+		app = QtGui.QApplication(sys.argv)
+		errormsg = ErrorMessage()
+		sys.exit(errormsg.exec_()) 
 
