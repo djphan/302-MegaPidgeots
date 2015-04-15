@@ -64,11 +64,7 @@ buttonPath = "HAND.OSGB"
 greenPath = "GreenSphere.OSGB"
 
 def print(*arg, **kwargs):
-	for args in arg:
-		f1 = open('printlog.txt', 'a')
-		f1.write(args)
-		f1.write("\n")
-		f1.close()
+	x = 1
 
 # A function for handling individual bone tests
 def askForBone(expectedPosition):
