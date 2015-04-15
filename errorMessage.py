@@ -11,7 +11,7 @@ class ErrorMessage(QtGui.QMainWindow):
 		super(ErrorMessage, self).__init__()
 
 		title = "Error"
-		error = "3 rigid bodies must be initialized in Motive before tests can be run."
+		error = "2 rigid bodies must be initialized in Motive before tests can be run."
 		QtGui.QMessageBox.critical(None, title, error, QtGui.QMessageBox.Close)
 		exit(0)
 
